@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    padding: 40px;
+}
+
+#wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color:antiquewhite;
+    height: 100%;
+    width: 100%;
+}
