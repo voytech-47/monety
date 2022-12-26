@@ -11,9 +11,21 @@
             <h1>Album monet</h1>
         </div>
         <div id="main">
-            <div class="panel">Lorem</div>
-            <div class="panel">Ipsum</div>
-            <div class="panel">Lorem</div>
+            <div class="panel">
+                <div class="panel-title">
+                    <h1>Lorem</h1>
+                </div>
+                <div class="panel-main">
+                    <img class="img-top" src="images/5-pln-back.jpg" alt="5-pln-front">
+                    <img class="img-bot" src="images/5-pln-front.jpg" alt="" srcset="">
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-title">Ipsum</div>
+            </div>
+            <div class="panel">
+                <div class="panel-title">Lorem</div>
+            </div>
             <!-- <div class="panel">Ipsum</div> -->
         </div>
     </div>
