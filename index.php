@@ -7,7 +7,15 @@
 </head>
 <body>
     <div id="wrapper">
-        <h1>Album monet</h1>
+        <div id="banner">
+            <h1>Album monet</h1>
+        </div>
+        <div id="main">
+            <div class="panel">Lorem</div>
+            <div class="panel">Ipsum</div>
+            <div class="panel">Lorem</div>
+            <!-- <div class="panel">Ipsum</div> -->
+        </div>
     </div>
     <script src="main.js"></script>
 </body>
