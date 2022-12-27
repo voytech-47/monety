@@ -7,13 +7,18 @@
 </head>
 <body>
     <div id="wrapper">
+        <!-- <div id="side">s</div> -->
         <div id="banner">
             <h1>Album monet</h1>
-        </div>
-        <div id="main">
-            <div class="panel">
-                <div class="panel-title">
-                    <h1>Lorem</h1>
+            <label for='sidebar' class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div id="main">
+                <div class="panel">
+                    <div class="panel-title">
+                        <h1>Lorem</h1>
                 </div>
                 <div class="panel-main">
                     <img class="img-top" src="images/5-pln-back.jpg" alt="5-pln-front">
@@ -28,6 +33,7 @@
             </div>
             <!-- <div class="panel">Ipsum</div> -->
         </div>
+    </div>
     </div>
     <script src="main.js"></script>
 </body>

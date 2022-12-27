@@ -8,9 +8,12 @@
 }
 
 body, html {
-    height: 100%;
-    width: 100%;
     background-color:#edeff1;
+}
+
+body {
+    width: 100vw;
+    overflow-x: hidden;
 }
 
 #wrapper {
@@ -38,11 +41,11 @@ body, html {
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
-    height: 91%;
     background-color:#edeff1;
     justify-content: center;
     margin-right: 10%;
     margin-left: 10%;
+    margin-bottom: 10%;
 }
 
 .panel {
@@ -65,7 +68,86 @@ body, html {
     align-items: center;
 }
 
-@media only screen and (max-width: 666px) {
+
+.panel-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: 100%;
+    
+}
+
+.panel-main {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    position: relative;    
+    align-items: center;
+}
+
+img {
+    height: 100%;
+    display: block;
+    
+}
+
+.img-bot {
+    transition: opacity 0.3s;
+}
+
+.img-bot:hover {
+    opacity: 0;
+}
+
+.img-bot {
+    position: absolute;
+}
+
+.burger {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    transition: 0.3s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 10px;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.burger>span {
+    width: 60%;
+    height: 5px;
+    position: absolute;
+    top: 50%;
+    background-color: black;
+    border-radius: 4px;
+    transition: transform 0.3s ease-in-out;
+    transform-origin: 50% 50%;
+}
+
+.burger>span:first-child {
+    transform: translateY(-250%);
+}
+
+.buerger > span:nth-child(2) {
+    transform: translateY(50%);
+}
+
+.burger>span:last-child {
+    transform: translateY(250%);
+}
+
+#side {
+    height: 100%;
+    width: 300px;
+}
+
+@media only screen and (max-width: 700px) {
     #main {
         display: flex;
         align-items: stretch;
@@ -82,47 +164,15 @@ body, html {
         display: flex;
         flex-direction: column;
         padding: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
         margin: 10px;
         border-radius: 10px;
         height: 12rem;
         width: revert;
         max-width: revert;
     }
-}
-
-.panel-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    width: 100%;
-
-}
-
-.panel-main {
-    width: 100%;
-    height: 80%;
-    display: flex;
-    justify-content: center;
-    position: relative;    
-    align-items: center;
-}
-
-img {
-    height: 100%;
-    display: block;
-
-}
-
-.img-bot {
-    transition: opacity 0.3s;
-}
-
-.img-bot:hover {
-    opacity: 0;
-}
-
-.img-bot {
-    position: absolute;
+    img {
+        height: 80%;
+    }
 }
