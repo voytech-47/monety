@@ -38,23 +38,18 @@ body {
 
 #main {
     display: flex;
-    align-items: stretch;
-    flex-direction: row;
+    align-items: center;
+    flex-direction: column;
     flex-wrap: wrap;
-    align-content: flex-start;
-    background-color:#edeff1;
+    align-content: center;
+    background-color: #edeff1;
     justify-content: center;
-    margin-right: 10%;
-    margin-left: 10%;
-    margin-bottom: 10%;
 }
 
 .panel {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    width: 47%;
-    max-width: 47%;
     padding: 15px;
     padding-top: 10px;
     padding-bottom: 20px;
@@ -92,73 +87,32 @@ body {
 img {
     height: 100%;
     display: block;
-    
-}
-
-.img-bot {
-    transition: opacity 0.3s;
-}
-
-.img-bot:hover {
-    opacity: 0;
-}
-
-.img-bot {
-    position: absolute;
-}
-
-.burger {
-    width: 55px;
-    height: 55px;
-    display: flex;
-    justify-content: center;
-    transition: 0.3s ease-in-out;
-    position: absolute;
-    top: 0;
-    left: 10px;
     cursor: pointer;
-    z-index: 3;
 }
 
-.burger>span {
-    width: 60%;
-    height: 5px;
-    position: absolute;
-    top: 50%;
-    background-color: black;
-    border-radius: 4px;
-    transition: transform 0.3s ease-in-out;
-    transform-origin: 50% 50%;
+
+#options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: #babcbe;
 }
 
-.burger>span:first-child {
-    transform: translateY(-250%);
-}
-
-.buerger > span:nth-child(2) {
-    transform: translateY(50%);
-}
-
-.burger>span:last-child {
-    transform: translateY(250%);
-}
-
-#side {
-    height: 100%;
-    width: 300px;
+#options > :not(:last-child) {
+    margin-right: 30px;
 }
 
 @media only screen and (max-width: 700px) {
     #main {
         display: flex;
-        align-items: stretch;
+        align-items: center;
         flex-direction: column;
         flex-wrap: nowrap;
-        align-content: stretch;
-        height: 91%;
-        justify-content: center;    
-        margin-left: 20%;
-        margin-right: 20%;
+        height: 100%; 
     }
     .panel {
         flex-grow: 1;
@@ -173,8 +127,13 @@ img {
         width: revert;
         max-width: revert;
     }
-    img {
-        height: 80%;
+    #options {
+        flex-direction: column;
+        align-items: center;
+    }
+    #options > :not(:last-child) {
+        margin-right: 0;
+        margin-bottom: 10px;
     }
 }
 
@@ -184,17 +143,6 @@ img {
 
 #banner > h1 {
     padding-bottom: 1rem;
-}
-
-#options {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    margin: 0;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    background-color: #babcbe;
 }
 
 #options > li {
@@ -212,6 +160,24 @@ img {
     color: #fa4807;
 }
 
-#options > :not(:last-child) {
-    margin-right: 30px;
+
+#settings {
+    padding-left: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    width: 75%;
+}
+
+#brightness_input, #contrast_input {
+    width: 100%;
+}
+
+#brightness_input {
+    margin-bottom: 1rem;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+
 }
