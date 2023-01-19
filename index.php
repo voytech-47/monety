@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Album monet</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
@@ -29,7 +29,8 @@
             try {
                 mysqli_select_db($polaczenie, 'monety');
             } catch (Exception $e) {
-                mysqli_query($polaczenie, "CREATE DATABASE monety; USE monety;");
+                mysqli_query($polaczenie, "CREATE DATABASE `monety`;");
+                mysqli_query($polaczenie, "USE `monety`;");
             }
             $showQuery = "SHOW TABLES";
             $tablesQuery = mysqli_query($polaczenie, $showQuery);
@@ -51,7 +52,7 @@
             ?>
         </div>
     </div>
-    <script src="main.js"></script>
+    <script src="script/main.js"></script>
 </body>
 
 </html>

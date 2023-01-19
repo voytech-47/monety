@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Album monet</title>
-    <link rel="stylesheet" href="style_moneta.css">
+    <link rel="stylesheet" href="styles/style_moneta.css">
 </head>
 
 <body>
@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-    <script src="moneta.js"></script>
+    <script src="script/moneta.js"></script>
 </body>
 
 </html>
