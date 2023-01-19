@@ -39,7 +39,7 @@
                                 <div class='panel-title'>
                                     <h1>" . $tables[0] . "</h1>
                                 </div>";
-                $fetchQuery = "SELECT `awers`, `rewers`, `nazwa` FROM " . $tables[0] . " ORDER BY `id` ASC LIMIT 1;";
+                $fetchQuery = "SELECT `awers`, `rewers`, `nazwa` FROM `" . $tables[0] . "` ORDER BY `id` ASC LIMIT 1;";
                 $fetch = mysqli_query($polaczenie, $fetchQuery);
                 while ($row = mysqli_fetch_row($fetch)) {
                     echo "<div class='panel-main'>";
