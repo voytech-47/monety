@@ -33,11 +33,11 @@
                     </span>
                     <span class="input">
                         <label for="awers">Awers:</label>
-                        <input required type="file" name="awers" id="awers" accept=".jpg,.jpeg,.png">
+                        <input required type="file" name="awers" id="awers" accept=".jpg,.jpeg,.png,.jfif">
                     </span>
                     <span class="input">
                         <label for="rewers">Rewers:</label>
-                        <input required type="file" name="rewers" id="rewers" accept=".jpg,.jpeg,.png">
+                        <input required type="file" name="rewers" id="rewers" accept=".jpg,.jpeg,.png,.jfif">
                     </span>
                     <span class="input input-textarea">
                         <label for="opis" id="opis-label">Opis:</label>
@@ -70,19 +70,19 @@
                 if (!isset($_POST['nazwa']) or !isset($_POST['opis'])) {
                     return;
                 }
-                $insertQuery = "INSERT INTO `".$_POST['album']."` (`id`, `nazwa`, `opis`, `awers`, `rewers`) VALUES (NULL, '" . $_POST['nazwa'] . "', '" . $_POST['opis'] . "', '" . $_FILES['awers']['name'] . "', '" . $_FILES['rewers']['name'] . "');";
-                $target_awers = "images/" . $_POST['album'] . "/" . basename($_FILES['awers']['name']);
-                $target_rewers = "images/" . $_POST['album'] . "/" . basename($_FILES['rewers']['name']);
+                $insertQuery = "INSERT INTO `" . strval($_POST['album']) . "` (`id`, `nazwa`, `opis`, `awers`, `rewers`) VALUES (NULL, '" . strval($_POST['nazwa']) . "', '" . strval($_POST['opis']) . "', '" . $_FILES['awers']['name'] . "', '" . $_FILES['rewers']['name'] . "');";
+                $target_awers = "images/" . strval($_POST['album']) . "/" . basename($_FILES['awers']['name']);
+                $target_rewers = "images/" . strval($_POST['album']) . "/" . basename($_FILES['rewers']['name']);
                 $fileType_awers = pathinfo($target_awers, PATHINFO_EXTENSION);
                 $fileType_rewers = pathinfo($target_rewers, PATHINFO_EXTENSION);
-                $allowed = array('jpg', 'jpeg', 'png');
+                $allowed = array('jpg', 'jpeg', 'png', 'jfif');
 
                 if (in_array($fileType_awers, $allowed) and in_array($fileType_rewers, $allowed)) {
                     move_uploaded_file($_FILES['awers']['tmp_name'], $target_awers);
                     move_uploaded_file($_FILES['rewers']['tmp_name'], $target_rewers);
                 }
                 mysqli_query($polaczenie, $insertQuery);
-                echo "<p style='margin-top: 2rem'>Dodano monetę " . $_POST['nazwa'] . " do katalogu " . $_POST['album'] . ".</p>";
+                echo "<p style='margin-top: 2rem'>Dodano monetę " . strval($_POST['nazwa']) . " do katalogu " . strval($_POST['album']) . ".</p>";
                 mysqli_close($polaczenie);
                 ?>
             </div>

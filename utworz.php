@@ -34,7 +34,6 @@
                     <input type="submit" value="Dodaj album">
                 </form>
                 <?php
-                // ini_set('display_errors', 0);
                 $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
                 if (mysqli_connect_errno()) {
                     echo "<p>error</p>";
@@ -42,7 +41,7 @@
                 if (!isset($_POST['nazwa'])) {
                     return;
                 }
-                $createQuery = "CREATE TABLE " . $_POST['nazwa'] . " (
+                $createQuery = "CREATE TABLE `" . strval($_POST['nazwa']) . "` (
                         `id` INT NOT NULL AUTO_INCREMENT,
                         `nazwa` VARCHAR(255) NOT NULL,
                         `opis` TEXT NOT NULL,
@@ -54,18 +53,18 @@
                 $flag = 1;
 
                 try {
-                    $query = mysqli_query($polaczenie, "SELECT 1 FROM " . $_POST['nazwa'] . " LIMIT 1;");
+                    $query = mysqli_query($polaczenie, "SELECT 1 FROM `" . strval($_POST['nazwa']) . "` LIMIT 1;");
                 } catch (Exception $e) {
                     $createTable = mysqli_query($polaczenie, $createQuery);
-                    if (!file_exists("images/" . $_POST['nazwa'])) {
-                        mkdir("images/" . $_POST['nazwa'], 0777, true);
+                    if (!file_exists("images/" . strval($_POST['nazwa']))) {
+                        mkdir("images/" . strval($_POST['nazwa']), 0777, true);
                     }
-                    echo "<p style='margin-top: 2rem;'>Dodano album o nazwie " . $_POST['nazwa'] . ".</p>";
+                    echo "<p style='margin-top: 2rem;'>Dodano album o nazwie " . strval($_POST['nazwa']) . ".</p>";
                     $flag = 0;
                 }
 
                 if ($flag) {
-                    echo "<p style='margin-top: 2rem;'>Istnieje już album o nazwie " . $_POST['nazwa'] . ".</p>";
+                    echo "<p style='margin-top: 2rem;'>Istnieje już album o nazwie " . strval($_POST['nazwa']) . ".</p>";
                 }
                 ?>
             </div>
