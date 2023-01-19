@@ -29,28 +29,62 @@
                     <h2>Wprowadź informacje dotyczące nowej monety:</h2>
                     <span class="input">
                         <label for="nazwa" id="nazwa-label">Nazwa:</label>
-                        <input type="text" name="nazwa" id="nazwa">
+                        <input required type="text" name="nazwa" id="nazwa">
                     </span>
                     <span class="input">
                         <label for="awers">Awers:</label>
-                        <input type="file" name="awers" id="awers">
+                        <input required type="file" name="awers" id="awers" accept=".jpg,.jpeg,.png">
                     </span>
                     <span class="input">
                         <label for="rewers">Rewers:</label>
-                        <input type="file" name="rewers" id="rewers">
+                        <input required type="file" name="rewers" id="rewers" accept=".jpg,.jpeg,.png">
                     </span>
                     <span class="input input-textarea">
                         <label for="opis" id="opis-label">Opis:</label>
-                        <textarea name="opis" id="opis"></textarea>
+                        <textarea required name="opis" id="opis"></textarea>
                     </span>
                     <span class="input">
                         <label for="album">Wybierz album:</label>
-                        <!-- wpisywanie albumów z bazy -->
-                        <select name="album" id="album">
-                        </select>
-                    </span>
-                    <input type="submit" value="Dodaj monetę">
+                        <?php
+                        $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+                        $showQuery = "SHOW TABLES";
+                        $query = mysqli_query($polaczenie, $showQuery);
+                        if (mysqli_num_rows($query) == 0) {
+                            echo "<select name='album' id='album' disabled>";
+                            echo "<option value='brak' selected>brak albumów</option>";
+                            echo "</select>";
+                            echo "</span>";
+                            echo "<input type='submit' value='Dodaj monetę' disabled>";
+                        } else {
+                            echo "<select name='album' id='album'>";
+                            while ($row = mysqli_fetch_row($query)) {
+                                echo "<option value='" . $row[0] . "'>" . $row[0] . "</option>";
+                            }
+                            echo "</select>";
+                            echo "</span>";
+                            echo "<input type='submit' value='Dodaj monetę'>";
+                        }
+                        ?>
                 </form>
+                <?php
+                if (!isset($_POST['nazwa']) or !isset($_POST['opis'])) {
+                    return;
+                }
+                $insertQuery = "INSERT INTO `".$_POST['album']."` (`id`, `nazwa`, `opis`, `awers`, `rewers`) VALUES (NULL, '" . $_POST['nazwa'] . "', '" . $_POST['opis'] . "', '" . $_FILES['awers']['name'] . "', '" . $_FILES['rewers']['name'] . "');";
+                $target_awers = "images/" . $_POST['album'] . "/" . basename($_FILES['awers']['name']);
+                $target_rewers = "images/" . $_POST['album'] . "/" . basename($_FILES['rewers']['name']);
+                $fileType_awers = pathinfo($target_awers, PATHINFO_EXTENSION);
+                $fileType_rewers = pathinfo($target_rewers, PATHINFO_EXTENSION);
+                $allowed = array('jpg', 'jpeg', 'png');
+
+                if (in_array($fileType_awers, $allowed) and in_array($fileType_rewers, $allowed)) {
+                    move_uploaded_file($_FILES['awers']['tmp_name'], $target_awers);
+                    move_uploaded_file($_FILES['rewers']['tmp_name'], $target_rewers);
+                }
+                mysqli_query($polaczenie, $insertQuery);
+                echo "<p style='margin-top: 2rem'>Dodano monetę " . $_POST['nazwa'] . " do katalogu " . $_POST['album'] . ".</p>";
+                mysqli_close($polaczenie);
+                ?>
             </div>
         </div>
     </div>

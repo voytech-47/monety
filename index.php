@@ -24,22 +24,31 @@
             </ul>
         </div>
         <div id="main">
-            <div class="panel">
-                <div class="panel-title">
-                    <h1>Lorem</h1>
-                </div>
-                <div class="panel-main">
-                    <img class="img-top" src="images/5-pln-back.jpg" alt="5-pln-front">
-                    <img class="img-bot" src="images/5-pln-front.jpg" alt="" srcset="">
-                </div>
-            </div>
-            <div class="panel">
-                <div class="panel-title">Ipsum</div>
-            </div>
-            <div class="panel">
-                <div class="panel-title">Lorem</div>
-            </div>
-            <!-- <div class="panel">Ipsum</div> -->
+            <?php
+            $polaczenie = mysqli_connect('localhost', 'root', '');
+            try {
+                mysqli_select_db($polaczenie, 'monety');
+            } catch (Exception $e) {
+                mysqli_query($polaczenie, "CREATE DATABASE monety; USE monety;");
+            }
+            $showQuery = "SHOW TABLES";
+            $tablesQuery = mysqli_query($polaczenie, $showQuery);
+            while ($tables = mysqli_fetch_row($tablesQuery)) {
+                echo "  <div class='panel'>
+                                <div class='panel-title'>
+                                    <h1>" . $tables[0] . "</h1>
+                                </div>";
+                $fetchQuery = "SELECT `awers`, `rewers`, `nazwa` FROM " . $tables[0] . " ORDER BY `id` ASC LIMIT 1;";
+                $fetch = mysqli_query($polaczenie, $fetchQuery);
+                while ($row = mysqli_fetch_row($fetch)) {
+                    echo "<div class='panel-main'>";
+                    echo "<img class='img-top' src='images/" . $tables[0] . "/" . $row[1] . "' alt='" . $row[2] . "'>";
+                    echo "<img class='img-bot' src='images/" . $tables[0] . "/" . $row[0] . "' alt='" . $row[2] . "'>";
+                    echo "</div>";
+                }
+                echo "</div>";
+            }
+            ?>
         </div>
     </div>
     <script src="main.js"></script>
