@@ -1,8 +1,0 @@
-CREATE TABLE `monety`. (
-`id` INT NOT NULL AUTO_INCREMENT , 
-`nazwa` VARCHAR NOT NULL , 
-`opis` TEXT NOT NULL , 
-`awers` MEDIUMBLOB NOT NULL , 
-`rewers` MEDIUMBLOB NOT NULL , 
-PRIMARY KEY (`id`)) ENGINE = InnoDB;
-
