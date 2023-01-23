@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Album monet</title>
-    <link rel="stylesheet" href="styles/style_utworz.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/style_form.css">
 </head>
 
 <body>
     <div id="wrapper">
         <div id="banner">
-            <h1 style="padding-left: 35px;">Album monet</h1>
             <ul id="options">
                 <li>
                     <a href="./index.php">Albumy</a>
@@ -21,6 +21,9 @@
                 <li>
                     <a href="./dodaj.php">Dodaj monetę</a>
                 </li>
+                <li>
+                    <a href="./login.php">Zaloguj się</a>
+                </li>
             </ul>
         </div>
         <div id="main">
@@ -30,6 +33,10 @@
                     <span class="input">
                         <label for="nazwa" id="nazwa-label">Nazwa: </label>
                         <input required type="text" name="nazwa" id="nazwa">
+                    </span>
+                    <span class="input">
+                        <label for="zdjecie">Zdjęcie albumu: </label>
+                        <input required type="file" id="zdjecie" name="zdjecie" accept=".jpg,.jpeg,.png,.jfif">
                     </span>
                     <input type="submit" value="Dodaj album">
                 </form>
@@ -59,6 +66,8 @@
                     if (!file_exists("images/" . strval($_POST['nazwa']))) {
                         mkdir("images/" . strval($_POST['nazwa']), 0777, true);
                     }
+                    $target_face = "images/" . strval($_POST['nazwa']) . "/face." . pathinfo($_FILES['zdjecie']['tmp_name'], PATHINFO_EXTENSION);
+                    move_uploaded_file($_FILES['zdjecie']['tmp_name'], $target_face);
                     echo "<p style='margin-top: 2rem;'>Dodano album o nazwie " . strval($_POST['nazwa']) . ".</p>";
                     $flag = 0;
                 }

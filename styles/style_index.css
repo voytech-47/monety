@@ -1,0 +1,22 @@
+#nav-bar {
+    width: 100%;
+}
+
+#banner>h1 {
+    padding-bottom: 1rem;
+}
+
+
+#options>li {
+    list-style-type: none;
+}
+
+#options>li>a {
+    transition: color 0.2s;
+    text-decoration: none;
+    color: black;
+}
+
+#options>li:hover>a {
+    color: #fa4807;
+}

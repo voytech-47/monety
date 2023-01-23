@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Album monet</title>
-    <link rel="stylesheet" href="styles/style_dodaj.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/style_form.css">
 </head>
 
 <body>
     <div id="wrapper">
         <div id="banner">
-            <h1 style="padding-left: 35px;">Album monet</h1>
             <ul id="options">
                 <li>
                     <a href="./index.php">Albumy</a>
@@ -20,6 +20,9 @@
                 </li>
                 <li>
                     <a href="./dodaj.php">Dodaj monetę</a>
+                </li>
+                <li>
+                    <a href="./login.php">Zaloguj się</a>
                 </li>
             </ul>
         </div>
