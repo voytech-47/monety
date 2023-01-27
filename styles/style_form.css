@@ -54,3 +54,7 @@ form>h2 {
     resize: vertical;
     font-size: medium;
 }
+
+#register {
+    display: none;
+}

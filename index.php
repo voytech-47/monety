@@ -1,3 +1,7 @@
+<?php
+    session_start();
+    $_SESSION['zalogowany'] = False;
+?>
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -5,7 +9,7 @@
     <meta charset="UTF-8">
     <title>Album monet</title>
     <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="styles/style_index.css">
+    <link rel="stylesheet" href="styles/style_form.css">
 </head>
 
 <body>
@@ -13,45 +17,63 @@
         <div id="banner">
             <ul id="options">
                 <li>
-                    <a href="./index.php">Albumy</a>
+                    <a href="./home.php">Albumy</a>
                 </li>
+                <?php
+                    if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+                        echo <<< EOL
+                        <li>
+                            <a href="./utworz.php">Utwórz album</a>
+                        </li>
+                        <li>
+                            <a href="./dodaj.php">Dodaj monetę</a>
+                        </li>
+                        EOL;
+                    }
+                ?>
                 <li>
-                    <a href="./utworz.php">Utwórz album</a>
-                </li>
-                <li>
-                    <a href="./dodaj.php">Dodaj monetę</a>
-                </li>
-                <li>
-                    <a href="./login.php">Zaloguj się</a>
+                    <a href="./index.php">Zaloguj się</a>
                 </li>
             </ul>
         </div>
         <div id="main">
-            <?php
-            $polaczenie = mysqli_connect('localhost', 'root', '');
-            try {
-                mysqli_select_db($polaczenie, 'monety');
-            } catch (Exception $e) {
-                mysqli_query($polaczenie, "CREATE DATABASE `monety`;");
-                mysqli_query($polaczenie, "USE `monety`;");
-            }
-            $showQuery = "SHOW TABLES";
-            $tablesQuery = mysqli_query($polaczenie, $showQuery);
-            if (mysqli_num_rows($tablesQuery) == 0) {
-                echo "<p>Brak albumów w bazie.</p>";
-            } else {
-                while ($tables = mysqli_fetch_row($tablesQuery)) {
-                    echo "<div class='panel'>
-                    <div class='panel-title'>
-                    <h1>" . $tables[0] . "</h1>
-                                </div>";
-                    echo "<div class='panel-main'>";
-                    echo "<img class='img-top' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'>";
-                    echo "</div></div>";
-                }
-            }
+            <div id="form">
+                <form action="index.php" method="post" enctype="multipart/form-data">
+                    <?php
+                    echo <<<EOL
+                        <span class="input">
+                        <label for="login">Login:</label>
+                        EOL;
+                    if (isset($_POST['login'])) {
+                        echo "<input type='text' id='login' name='login' required value='" . $_POST['login'] . "'>";
+                    } else {
+                        echo "<input type='text' required id='login' name='login'>";
+                    }
+                    echo <<<EOL
+                        </span>
+                        <span class="input">
+                        <label for="haslo">Hasło:</label>
+                        <input type="password" name="haslo" id="haslo" required>
+                        </span>
+                        <input type="submit" value="Zaloguj się">
+                        EOL;
+                    
+                    if (isset($_POST['haslo']) and isset($_POST['login'])) {
+                        $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+                        $loginKW = 'SELECT login, haslo FROM uzytkownicy WHERE login = "'.$_POST['login'].'";';
+                        $row = mysqli_fetch_row(mysqli_query($polaczenie, $loginKW));
+                        if ($row == null or $row[0] != 'admin' or $row[1] != sha1($_POST['haslo'])) {
+                            echo "<p style='text-align: center; margin-top:2rem'>Niepoprawny login lub hasło";
+                        } else {
+                            $_SESSION['zalogowany'] = true;
+                            $_SESSION['login'] = $_POST['login'];
+                            header("Location: home.php");
+                        }
+                    }
 
-            ?>
+                    ?>
+                </form>
+            </div>
         </div>
     </div>
     <script src="script/main.js"></script>

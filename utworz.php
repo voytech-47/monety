@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -13,17 +16,29 @@
         <div id="banner">
             <ul id="options">
                 <li>
-                    <a href="./index.php">Albumy</a>
+                    <a href="./home.php">Albumy</a>
                 </li>
-                <li>
-                    <a href="./utworz.php">Utwórz album</a>
-                </li>
-                <li>
-                    <a href="./dodaj.php">Dodaj monetę</a>
-                </li>
-                <li>
-                    <a href="./login.php">Zaloguj się</a>
-                </li>
+                <?php
+                    if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+                        echo <<< EOL
+                        <li>
+                            <a href="./utworz.php">Utwórz album</a>
+                        </li>
+                        <li>
+                            <a href="./dodaj.php">Dodaj monetę</a>
+                        </li>
+                        <li>
+                            <a href="./index.php">Wyloguj się</a>
+                        </li>
+                        EOL;
+                    } else {
+                        echo <<< EOL
+                        <li>
+                            <a href="./index.php">Zaloguj się</a>
+                        </li>
+                        EOL;
+                    }
+                ?>
             </ul>
         </div>
         <div id="main">
@@ -81,7 +96,7 @@
                 <p style="margin-top: 1rem;">Obecne albumy:</p>
                 <ul>
                     <?php
-                    $showQuery = "SHOW TABLES;";
+                    $showQuery = "SHOW TABLES WHERE tables_in_monety NOT LIKE 'uzytkownicy'";
                     $query = mysqli_query($polaczenie, $showQuery);
                     while ($row = mysqli_fetch_row($query)) {
                         echo "<li>" . $row[0] . "</li>";
