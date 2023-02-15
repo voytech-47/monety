@@ -1,5 +1,8 @@
 <?php
-    session_start();
+session_start();
+if (!$_SESSION['zalogowany']) {
+    header('Location: index.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -12,32 +15,33 @@
 </head>
 
 <body>
+    <script src="./script/main.js"></script>
     <div id="wrapper">
         <div id="banner">
             <ul id="options">
                 <li>
-                    <a href="./home.php">Albumy</a>
+                    <a onclick=fadeOut("./home.php")>Albumy</a>
                 </li>
                 <?php
-                    if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
-                        echo <<< EOL
+                if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+                    echo <<< EOL
                         <li>
-                            <a href="./utworz.php">Utwórz album</a>
+                            <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
                         </li>
                         <li>
-                            <a href="./dodaj.php">Dodaj monetę</a>
+                            <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                         </li>
                         <li>
-                            <a href="./index.php">Wyloguj się</a>
-                        </li>
-                        EOL;
-                    } else {
-                        echo <<< EOL
-                        <li>
-                            <a href="./index.php">Zaloguj się</a>
+                            <a onclick=fadeOut("./index.php")>Wyloguj się</a>
                         </li>
                         EOL;
-                    }
+                } else {
+                    echo <<< EOL
+                        <li>
+                            <a onclick=fadeOut("./index.php")>Zaloguj się</a>
+                        </li>
+                        EOL;
+                }
                 ?>
             </ul>
         </div>
@@ -83,12 +87,12 @@
                     }
                     $target_face = "images/" . strval($_POST['nazwa']) . "/face." . pathinfo($_FILES['zdjecie']['tmp_name'], PATHINFO_EXTENSION);
                     move_uploaded_file($_FILES['zdjecie']['tmp_name'], $target_face);
-                    echo "<p style='margin-top: 2rem;'>Dodano album o nazwie " . strval($_POST['nazwa']) . ".</p>";
+                    echo "<p style='margin-top: 2rem;'>Dodano album o nazwie <i>" . strval($_POST['nazwa']) . "</i>.</p>";
                     $flag = 0;
                 }
 
                 if ($flag) {
-                    echo "<p style='margin-top: 2rem;'>Istnieje już album o nazwie " . strval($_POST['nazwa']) . ".</p>";
+                    echo "<p style='margin-top: 2rem;'>Istnieje już album o nazwie <i>" . strval($_POST['nazwa']) . "</i>.</p>";
                 }
                 ?>
             </div>
@@ -107,7 +111,6 @@
             </div>
         </div>
     </div>
-    <script src="script/main.js"></script>
 </body>
 
 </html>

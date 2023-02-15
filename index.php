@@ -13,26 +13,27 @@
 </head>
 
 <body>
+    <script src="./script/main.js"></script>
     <div id="wrapper">
         <div id="banner">
             <ul id="options">
                 <li>
-                    <a href="./home.php">Albumy</a>
+                    <a onclick=fadeOut("./home.php">Albumy</a>
                 </li>
                 <?php
                     if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
                         echo <<< EOL
                         <li>
-                            <a href="./utworz.php">Utwórz album</a>
+                            <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
                         </li>
                         <li>
-                            <a href="./dodaj.php">Dodaj monetę</a>
+                            <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                         </li>
                         EOL;
                     }
                 ?>
                 <li>
-                    <a href="./index.php">Zaloguj się</a>
+                    <a onclick=fadeOut("./index.php")>Zaloguj się</a>
                 </li>
             </ul>
         </div>
@@ -61,7 +62,12 @@
                     if (isset($_POST['haslo']) and isset($_POST['login'])) {
                         $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
                         $loginKW = 'SELECT login, haslo FROM uzytkownicy WHERE login = "'.$_POST['login'].'";';
-                        $row = mysqli_fetch_row(mysqli_query($polaczenie, $loginKW));
+                        try {
+                            $row = mysqli_fetch_row(mysqli_query($polaczenie, $loginKW));
+                        } catch (Exception $e) {
+                            echo "<p style='text-align: center; margin-top:2rem'>Błąd w bazie danych, skontaktuj się z administratorem";
+                            return;
+                        }
                         if ($row == null or $row[0] != 'admin' or $row[1] != sha1($_POST['haslo'])) {
                             echo "<p style='text-align: center; margin-top:2rem'>Niepoprawny login lub hasło";
                         } else {
@@ -76,7 +82,6 @@
             </div>
         </div>
     </div>
-    <script src="script/main.js"></script>
 </body>
 
 </html>

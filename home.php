@@ -12,29 +12,30 @@
 </head>
 
 <body>
+    <script src="./script/main.js"></script>
     <div id="wrapper">
         <div id="banner">
             <ul id="options">
                 <li>
-                    <a href="./home.php">Albumy</a>
+                    <a onclick=fadeOut("./home.php")>Albumy</a>
                 </li>
                 <?php
                     if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
                         echo <<< EOL
                         <li>
-                            <a href="./utworz.php">Utwórz album</a>
+                            <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
                         </li>
                         <li>
-                            <a href="./dodaj.php">Dodaj monetę</a>
+                            <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                         </li>
                         <li>
-                            <a href="./index.php">Wyloguj się</a>
+                            <a onclick=fadeOut("./index.php")>Wyloguj się</a>
                         </li>
                         EOL;
                     } else {
                         echo <<< EOL
                         <li>
-                            <a href="./index.php">Zaloguj się</a>
+                            <a onclick=fadeOut("./index.php")>Zaloguj się</a>
                         </li>
                         EOL;
                     }
@@ -61,7 +62,7 @@
                     <h1>" . $tables[0] . "</h1>
                                 </div>";
                     echo "<div class='panel-main'>";
-                    echo "<img class='img-top' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'>";
+                    echo "<a onclick=fadeOut('./album.php?nazwa=".$tables[0]."')><img class='img-bot' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                     echo "</div></div>";
                 }
             }
@@ -69,7 +70,6 @@
             ?>
         </div>
     </div>
-    <script src="script/main.js"></script>
 </body>
 
 </html>

@@ -1,9 +1,12 @@
 <?php
-    session_start();
+session_start();
+if (!$_SESSION['zalogowany']) {
+    header('Location: index.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
-<!-- asd -->
+
 <head>
     <meta charset="UTF-8">
     <title>Album monet</title>
@@ -12,32 +15,33 @@
 </head>
 
 <body>
+    <script src="./script/main.js"></script>
     <div id="wrapper">
         <div id="banner">
             <ul id="options">
                 <li>
-                    <a href="./home.php">Albumy</a>
+                    <a onclick=fadeOut("./home.php")>Albumy</a>
                 </li>
                 <?php
-                    if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
-                        echo <<< EOL
+                if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+                    echo <<<EOL
                         <li>
-                            <a href="./utworz.php">Utwórz album</a>
+                            <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
                         </li>
                         <li>
-                            <a href="./dodaj.php">Dodaj monetę</a>
+                            <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                         </li>
                         <li>
-                            <a href="./index.php">Wyloguj się</a>
-                        </li>
-                        EOL;
-                    } else {
-                        echo <<< EOL
-                        <li>
-                            <a href="./index.php">Zaloguj się</a>
+                            <a onclick=fadeOut("./index.php")>Wyloguj się</a>
                         </li>
                         EOL;
-                    }
+                } else {
+                    echo <<<EOL
+                        <li>
+                            <a onclick=fadeOut("./index.php")>Zaloguj się</a>
+                        </li>
+                        EOL;
+                }
                 ?>
             </ul>
         </div>
@@ -100,13 +104,12 @@
                     move_uploaded_file($_FILES['rewers']['tmp_name'], $target_rewers);
                 }
                 mysqli_query($polaczenie, $insertQuery);
-                echo "<p style='margin-top: 2rem'>Dodano monetę " . strval($_POST['nazwa']) . " do katalogu " . strval($_POST['album']) . ".</p>";
+                echo "<p style='margin-top: 2rem'>Dodano monetę <i>" . strval($_POST['nazwa']) . "</i> do katalogu <i>" . strval($_POST['album']) . "</i>.</p>";
                 mysqli_close($polaczenie);
                 ?>
             </div>
         </div>
     </div>
-    <script src="script/main.js"></script>
 </body>
 
 </html>
