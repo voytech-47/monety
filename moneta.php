@@ -68,7 +68,7 @@ if (!isset($_GET['admin'])) {
         <div id="main">
             <div id="back">
                 <?php
-                if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
+                if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
                     echo "<a onclick=fadeOut('./album.php?nazwa=" . $_SESSION['album'] . "&admin=yes')>Powrót do albumu</a>";
                 } else {
                     echo "<a onclick=fadeOut('./album.php?nazwa=" . $_SESSION['album'] . "')>Powrót do albumu</a>";
@@ -96,7 +96,7 @@ if (!isset($_GET['admin'])) {
                 </div>
             </div>
             <?php
-            if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
+            if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
                 $adminQuery = "SELECT nazwa, opis FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                 $query2 = mysqli_query($polaczenie, $adminQuery);
                 $row = mysqli_fetch_row($query2);

@@ -136,9 +136,7 @@ a {
     justify-content: center;
     width: 100%;
     margin: 0;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    padding-left: 0;
+    padding: 1rem 20px;
     background-color: #babcbe;
 }
 
@@ -146,7 +144,7 @@ a {
     margin-right: 30px;
 }
 
-@media only screen and (max-width: 888px) {
+@media only screen and (max-width: 770px) {
     #main {
         display: flex;
         align-items: stretch;
@@ -213,4 +211,13 @@ a {
 
 #options> :not(:last-child) {
     margin-right: 30px;
+}
+
+#panels {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
 }

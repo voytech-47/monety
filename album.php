@@ -62,37 +62,39 @@ session_start();
                 }
                 ?>
             </span>
-            <?php
-            if (!isset($_GET['nazwa'])) {
-                header("Location: home.php");
-            }
-            $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-            $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_GET['nazwa'] . "`;";
-            $query = mysqli_query($polaczenie, $showQuery);
-            if (mysqli_num_rows($query) == 0) {
-                echo "<p style='text-align: center; margin-bottom: 1rem'>Brak monet w albumie.&nbsp</p><br>";
-            } else {
-                while ($row = mysqli_fetch_row($query)) {
-                    echo "<div class='panel'>";
-                    echo "<div class='panel-title'>";
-                    echo "<h1>" . $row[0] . "</h1>";
-                    echo "</div>";
-                    echo "<div class='panel-main'>";
-                    $newRow = str_replace(' ', '%20', $row[0]);
-                    if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                        echo '<a onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_GET["nazwa"] . '&admin=yes")>';
-                    } else {
-                        echo '<a onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_GET["nazwa"] . '")>';
-                    }
-                    echo "<img class='img-bot' src='images/" . $_GET['nazwa'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
+            <div id="panels">
+                <?php
+                if (!isset($_GET['nazwa'])) {
+                    header("Location: home.php");
+                }
+                $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+                $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_GET['nazwa'] . "`;";
+                $query = mysqli_query($polaczenie, $showQuery);
+                if (mysqli_num_rows($query) == 0) {
+                    echo "<p style='text-align: center; margin-bottom: 1rem'>Brak monet w albumie.&nbsp</p><br>";
+                } else {
+                    while ($row = mysqli_fetch_row($query)) {
+                        echo "<div class='panel'>";
+                        echo "<div class='panel-title'>";
+                        echo "<h1>" . $row[0] . "</h1>";
+                        echo "</div>";
+                        echo "<div class='panel-main'>";
+                        $newRow = str_replace(' ', '%20', $row[0]);
+                        if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                            echo '<a onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_GET["nazwa"] . '&admin=yes")>';
+                        } else {
+                            echo '<a onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_GET["nazwa"] . '")>';
+                        }
+                        echo "<img class='img-bot' src='images/" . $_GET['nazwa'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
                           <img class='img-top' src='images/" . $_GET['nazwa'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
                           </a>";
-                    // echo "<p class='opis'>" . $row[1] . "</p>";
-                    echo "</div>";
-                    echo "</div>";
+                        // echo "<p class='opis'>" . $row[1] . "</p>";
+                        echo "</div>";
+                        echo "</div>";
+                    }
                 }
-            }
-            ?>
+                ?>
+            </div>
         </div>
     </div>
 </body>
