@@ -18,7 +18,7 @@
         <div id="banner">
             <ul id="options">
                 <li>
-                    <a onclick=fadeOut("./home.php">Albumy</a>
+                    <a onclick=fadeOut("./home.php")>Albumy</a>
                 </li>
                 <?php
                     if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {

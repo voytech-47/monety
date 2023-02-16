@@ -32,6 +32,9 @@ session_start();
                     <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                     </li>
                     <li>
+                    <a onclick=fadeOut("./admin.php")>Panel administratora</a>
+                    </li>
+                    <li>
                     <a onclick=fadeOut("./index.php")>Wyloguj się</a>
                     </li>
                     EOL;
@@ -50,6 +53,15 @@ session_start();
             ?>
         </div>
         <div id="main">
+            <span id='back-span'>
+                <?php
+                if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                    echo "<a class='back' onclick=fadeOut('./admin.php')>Powrót do panelu administratora</a>";
+                } else {
+                    echo "<a class='back' onclick=fadeOut('./home.php')>Powrót do albumów</a>";
+                }
+                ?>
+            </span>
             <?php
             if (!isset($_GET['nazwa'])) {
                 header("Location: home.php");
@@ -59,7 +71,6 @@ session_start();
             $query = mysqli_query($polaczenie, $showQuery);
             if (mysqli_num_rows($query) == 0) {
                 echo "<p style='text-align: center; margin-bottom: 1rem'>Brak monet w albumie.&nbsp</p><br>";
-                echo "<a class='back' onclick=fadeOut('./home.php')>Powrót do albumów</a>";
             } else {
                 while ($row = mysqli_fetch_row($query)) {
                     echo "<div class='panel'>";
@@ -67,10 +78,14 @@ session_start();
                     echo "<h1>" . $row[0] . "</h1>";
                     echo "</div>";
                     echo "<div class='panel-main'>";
-                    echo "<a onclick=fadeOut('./moneta.php?nazwa=" . $row[0] . "&album=" . $_GET['nazwa'] . "')>
-                                    <img class='img-bot' src='images/" . $_GET['nazwa'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
-                                    <img class='img-top' src='images/" . $_GET['nazwa'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
-                                    </a>";
+                    if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                        echo "<a onclick=fadeOut('./moneta.php?nazwa=" . $row[0] . "&album=" . $_GET['nazwa'] . "&admin=yes')>";
+                    } else {
+                        echo "<a onclick=fadeOut('./moneta.php?nazwa=" . $row[0] . "&album=" . $_GET['nazwa'] . "')>";
+                    }
+                    echo "<img class='img-bot' src='images/" . $_GET['nazwa'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
+                          <img class='img-top' src='images/" . $_GET['nazwa'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
+                          </a>";
                     // echo "<p class='opis'>" . $row[1] . "</p>";
                     echo "</div>";
                     echo "</div>";

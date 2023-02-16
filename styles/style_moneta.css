@@ -39,7 +39,7 @@
 
 #main {
     display: flex;
-    align-items: baseline;
+    align-items: stretch;
     flex-direction: column;
     align-content: center;
     background-color: #edeff1;
@@ -107,4 +107,45 @@
 
 input[type="range"] {
     width: 100%;
+}
+
+.input {
+    display: flex;
+    flex-direction: row;
+}
+
+.input input {
+    margin-right: auto;
+}
+
+#opis {
+    display: inline-block;
+    /* line-height: 200%; */
+}
+
+.input-textarea {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.input input:not([type="file"]) {
+    display: inline-block;
+    width: 100%;
+}
+
+.input label {
+    margin-right: 5px;
+}
+
+.input textarea {
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    width: 100%;
+    resize: vertical;
+    font-size: medium;
 }

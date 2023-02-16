@@ -29,6 +29,9 @@
                             <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                         </li>
                         <li>
+                            <a onclick=fadeOut("./admin.php")>Panel administratora</a>
+                        </li>
+                        <li>
                             <a onclick=fadeOut("./index.php")>Wyloguj się</a>
                         </li>
                         EOL;
