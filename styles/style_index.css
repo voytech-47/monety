@@ -24,7 +24,8 @@
     color: #fa4807;
 }
 
-.img-top, .img-bot {
+.img-top,
+.img-bot {
     cursor: pointer;
 }
 
@@ -33,12 +34,13 @@
     position: absolute;
     top: 0;
 }
+
 .img-top:hover {
     opacity: 0;
 }
 
 #main {
-display: flex;
+    display: flex;
     align-items: stretch;
     flex-direction: column;
     flex-wrap: wrap;
@@ -64,7 +66,7 @@ display: flex;
     }
 }
 
-#banner > h1 {
+#banner>h1 {
     width: 100%;
     background: #D4D6D8;
     text-align: center;

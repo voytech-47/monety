@@ -122,8 +122,8 @@ if (!isset($_GET['admin'])) {
                         } else {
                             echo '<a onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_SESSION["nazwa"] . '")>';
                         }
-                        echo "<img class='img-bot' src='images/" . $_SESSION['nazwa'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
-                          <img class='img-top' src='images/" . $_SESSION['nazwa'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
+                        echo "<img class='img-top' src='images/" . $_SESSION['nazwa'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
+                          <img class='img-bot' src='images/" . $_SESSION['nazwa'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
                           </a>";
                         // echo "<p class='opis'>" . $row[1] . "</p>";
                         echo "</div>";
