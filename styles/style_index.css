@@ -24,7 +24,7 @@
     color: #fa4807;
 }
 
-.img-top, .img-bot, .panel-title > h1 {
+.img-top, .img-bot {
     cursor: pointer;
 }
 
