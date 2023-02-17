@@ -35,6 +35,9 @@ if (!isset($_GET['admin'])) {
                     <a onclick=fadeOut("./home.php")>Albumy</a>
                 </li>
                 <?php
+                foreach ($_GET as $key => $value) {
+                    $_SESSION[$key] = $value;
+                }
                 if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
                     echo <<<EOL
                         <li>
@@ -44,7 +47,7 @@ if (!isset($_GET['admin'])) {
                             <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                         </li>
                         <li>
-                            <a onclick=fadeOut("./admin.php")>Panel administratora</a>
+                            <a onclick=fadeOut("./home.php?admin=yes")>Panel administratora</a>
                         </li>
                         <li>
                             <a onclick=fadeOut("./index.php")>Wyloguj się</a>
@@ -68,7 +71,7 @@ if (!isset($_GET['admin'])) {
         <div id="main">
             <div id="back">
                 <?php
-                if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
                     echo "<a onclick=fadeOut('./album.php?nazwa=" . $_SESSION['album'] . "&admin=yes')>Powrót do albumu</a>";
                 } else {
                     echo "<a onclick=fadeOut('./album.php?nazwa=" . $_SESSION['album'] . "')>Powrót do albumu</a>";
@@ -96,7 +99,7 @@ if (!isset($_GET['admin'])) {
                 </div>
             </div>
             <?php
-            if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+            if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
                 $adminQuery = "SELECT nazwa, opis FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                 $query2 = mysqli_query($polaczenie, $adminQuery);
                 $row = mysqli_fetch_row($query2);

@@ -24,7 +24,7 @@ if (!$_SESSION['zalogowany']) {
                 </li>
                 <?php
                 if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
-                    echo <<< EOL
+                    echo <<<EOL
                         <li>
                             <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
                         </li>
@@ -32,11 +32,14 @@ if (!$_SESSION['zalogowany']) {
                             <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                         </li>
                         <li>
+                            <a onclick=fadeOut("./home.php?admin=yes")>Panel administratora</a>
+                        </li>
+                        <li>
                             <a onclick=fadeOut("./index.php")>Wyloguj się</a>
                         </li>
                         EOL;
                 } else {
-                    echo <<< EOL
+                    echo <<<EOL
                         <li>
                             <a onclick=fadeOut("./index.php")>Zaloguj się</a>
                         </li>

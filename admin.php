@@ -19,18 +19,30 @@ session_start();
                 <li>
                     <a onclick="fadeOut(&quot;./home.php&quot;)">Albumy</a>
                 </li>
-                <li>
-                    <a onclick="fadeOut(&quot;./utworz.php&quot;)">Utwórz album</a>
-                </li>
-                <li>
-                    <a onclick="fadeOut(&quot;./dodaj.php&quot;)">Dodaj monetę</a>
-                </li>
-                <li>
-                    <a onclick="fadeOut(&quot;./admin.php&quot;)">Panel administratora</a>
-                </li>
-                <li class="align-right">
-                    <a onclick="fadeOut(&quot;./index.php&quot;)">Wyloguj się</a>
-                </li>
+                <?php
+                if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+                    echo <<<EOL
+                        <li>
+                            <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
+                        </li>
+                        <li>
+                            <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
+                        </li>
+                        <li>
+                            <a onclick=fadeOut("./home.php?admin=yes")>Panel administratora</a>
+                        </li>
+                        <li>
+                            <a onclick=fadeOut("./index.php")>Wyloguj się</a>
+                        </li>
+                        EOL;
+                } else {
+                    echo <<<EOL
+                        <li>
+                            <a onclick=fadeOut("./index.php")>Zaloguj się</a>
+                        </li>
+                        EOL;
+                }
+                ?>
             </ul>
         </div>
         <div id="main">

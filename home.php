@@ -29,7 +29,7 @@ session_start();
                             <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                         </li>
                         <li>
-                            <a onclick=fadeOut("./admin.php")>Panel administratora</a>
+                            <a onclick=fadeOut("./home.php?admin=yes")>Panel administratora</a>
                         </li>
                         <li>
                             <a onclick=fadeOut("./index.php")>Wyloguj się</a>
@@ -46,6 +46,13 @@ session_start();
             </ul>
         </div>
         <div id="main">
+            <?php
+                if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                    echo "<p style='text-align: left'>Wybierz, aby edytować album:</p>";
+                } else {
+                    echo "<p style='text-align: left'>Dostępne albumy:</p>";
+                }
+            ?>
             <div id="panels">
                 <?php
                 $polaczenie = mysqli_connect('localhost', 'root', '');
@@ -58,7 +65,7 @@ session_start();
                 $showQuery = "SHOW TABLES WHERE tables_in_monety NOT LIKE 'uzytkownicy'";
                 $tablesQuery = mysqli_query($polaczenie, $showQuery);
                 if (mysqli_num_rows($tablesQuery) == 0) {
-                    echo "<p style='text-align: center'>Brak albumów w bazie.</p>";
+                    echo "<p style='text-align: left'>Brak albumów w bazie.</p>";
                 } else {
                     while ($tables = mysqli_fetch_row($tablesQuery)) {
                         echo "<div class='panel'>
@@ -66,7 +73,11 @@ session_start();
                     <h1>" . $tables[0] . "</h1>
                                 </div>";
                         echo "<div class='panel-main'>";
-                        echo "<a onclick=fadeOut('./album.php?nazwa=" . $tables[0] . "')><img class='img-bot' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                        if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $tables[0] . "&admin=yes')><img class='img-bot' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                        } else {
+                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $tables[0] . "')><img class='img-bot' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                        }
                         echo "</div></div>";
                     }
                 }
