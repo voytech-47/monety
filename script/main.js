@@ -3,6 +3,8 @@ window.onload = function() {
         console.log(element.nextElementSibling.clientHeight)
         if (element.clientHeight <= element.nextElementSibling.clientHeight)
             element.parentNode.parentNode.style.height = element.nextElementSibling.clientHeight + "px"
+        if (element.clientWidth <= element.nextElementSibling.clientWidth)
+            element.parentNode.parentNode.style.width = element.nextElementSibling.clientWidth + "px"
     })
 }
 

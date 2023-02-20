@@ -73,7 +73,8 @@ if (!isset($_GET['admin'])) {
             </ul>
             <div id="banner-bottom">
                 <?php
-                echo "<a onclick=fadeOut('./album.php?nazwa=" . $_SESSION['album'] . "')>Album: " . $_SESSION['album'] . "</a>";
+                $backLink = str_replace(' ', '%20', $_SESSION['album']);
+                echo "<a onclick=fadeOut('./album.php?nazwa=" . $backLink . "')>Powrót do albumu: " . $_SESSION['album'] . "</a>";
                 ?>
             </div>
         </div>
@@ -107,82 +108,92 @@ if (!isset($_GET['admin'])) {
                     ?>
                 </div>
             </div>
-            <?php
-            if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
-                $adminQuery = "SELECT nazwa, opis FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
-                $query2 = mysqli_query($polaczenie, $adminQuery);
-                $row = mysqli_fetch_row($query2);
-                echo <<<EOL
+            <div id="side">
+                <?php
+                if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
+                    $adminQuery = "SELECT nazwa, opis FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
+                    $query2 = mysqli_query($polaczenie, $adminQuery);
+                    $row = mysqli_fetch_row($query2);
+                    echo <<<EOL
                     <form id='form' action="moneta.php" method="post" enctype="multipart/form-data">
                     <span class="input" style="margin-bottom: 0.5rem">
                     <label for="nazwa" id="nazwa-label">Nazwa:</label>
                     EOL;
-                if (isset($_POST['nazwa']))
-                    echo '<input required type="text" name="nazwa" id="nazwa" value="' . $_POST['nazwa'] . '">';
-                else
-                    echo '<input required type="text" name="nazwa" id="nazwa" value="' . $row[0] . '">';
-                echo <<<EOL
+                    if (isset($_POST['nazwa']))
+                        echo '<input required type="text" name="nazwa" id="nazwa" value="' . $_POST['nazwa'] . '">';
+                    else
+                        echo '<input required type="text" name="nazwa" id="nazwa" value="' . $row[0] . '">';
+                    echo <<<EOL
                     </span>
                     <span class="input input-textarea">
                     <label for="opis" id="opis-label">Opis:</label>
                     EOL;
-                if (isset($_POST['nazwa']))
-                    echo '<textarea required name="opis" id="opis">' . $_POST['opis'] . '</textarea>';
-                else
-                    echo '<textarea required name="opis" id="opis">' . $row[1] . '</textarea>';
-                echo "</span>";
-                echo "<input id='deleteCheck' name='deleteCheck' type='checkbox' style='display: none'>";
-                echo "<button type='button' id='delete' formmethod='post' form='form' style='margin-bottom: 1rem; width: 100%' onclick='usun()'>Usuń monetę</button>";
-                echo "<input type='submit' id='confirm' value='Zaakceptuj zmiany' style='margin-bottom: 1.5rem; width: 100%'>";
-                echo "</form>";
-                if (isset($_POST['nazwa'])) {
-                    $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
-                    $query3 = mysqli_query($polaczenie, $updateQuery);
+                    if (isset($_POST['nazwa']))
+                        echo '<textarea required name="opis" id="opis">' . $_POST['opis'] . '</textarea>';
+                    else
+                        echo '<textarea required name="opis" id="opis">' . $row[1] . '</textarea>';
+                    echo "</span>";
+                    echo "<input id='deleteCheck' name='deleteCheck' type='checkbox' style='display: none'>";
+                    echo "<button type='button' id='delete' formmethod='post' form='form' style='margin-bottom: 1rem; width: 100%' onclick='usun()'>Usuń monetę</button>";
+                    echo "<input type='submit' id='confirm' value='Zaakceptuj zmiany' style='margin-bottom: 1.5rem; width: 100%'>";
+                    echo "</form>";
+                    if (isset($_POST['nazwa'])) {
+                        $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
+                        $query3 = mysqli_query($polaczenie, $updateQuery);
+                    }
+                    mysqli_close($polaczenie);
+                    if (isset($_POST['nazwa'])) {
+                        echo "<p style='margin-bottom:1.5rem'>Informacje zostały zaktualizowane</p>";
+                    }
                 }
-                mysqli_close($polaczenie);
-                if (isset($_POST['nazwa'])) {
-                    echo "<p style='margin-bottom:1.5rem'>Informacje zostały zaktualizowane</p>";
-                }
-            } else {
-                echo "<p style='margin-top:1rem; margin-bottom:1.5rem'>Opis: " . $row[1] . "</p>";
-            }
-            ?>
-            <div id="settings">
-                <div id="brightness">
-                    <span>
-                        <label for="brightness">Jasność: </label>
-                        <span id="brightness_value">100%</span>
-                    </span>
-                    <input min=50 max=200 value=100 type="range" name="brightness" id="brightness_input"
-                        oninput="changeBrightness(this.value)">
-                </div>
-                <div id="contrast">
-                    <span>
-                        <label for="contrast">Kontrast: </label>
-                        <span id="contrast_value">100%</span>
-                    </span>
-                    <input min=50 max=200 value=100 type="range" name="contrast" id="contrast_input"
-                        oninput="changeContrast(this.value)">
-                </div>
-                <div id="lupa-top" style='margin-bottom:0.7rem'>
-                    <span>
-                        <label for="magnify-top">Włącz lupę dla awersu</label>
-                        <input type="checkbox" name="magnify-top" id="magnify-top" oninput=checkMagnify("top")>
-                    </span>
-                    <span class='lupa-value'>
-                        <input type="range" value=2 min=1.5 max=5 step=0.5 oninput=changeMagnifyTop(this.value) name="strength-top" id="strength-top">
-                        <span id='magnify-value-top' style='padding:15px'>2x</span>
-                    </span>
-                </div>
-                <div id="lupa-bot">
-                    <span>
-                        <label for="magnify-bot">Włącz lupę dla rewersu</label>
-                        <input type="checkbox" name="magnify-bot" id="magnify-bot" oninput=checkMagnify("bot")>
-                    </span>
-                    <span class='lupa-value'>
-                        <input type="range" value=2 min=1.5 max=5 step=0.5 oninput=changeMagnifyBot(this.value) name="strength-bot" id="strength-bot">
-                        <span id='magnify-value-bot' style='padding:15px'>2x</span>
-                    </span>
+                ?>
+                <div id="settings">
+                    <?php
+                        if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
+                        } else {
+                            echo"<p style='margin-bottom:.7rem'>Album: <i>" . $_SESSION['album'] . "</i></p>";
+                            echo "<p style='margin-bottom:.7rem'>Nazwa: <i>" . $row[0] . "</i></p>";
+                            echo "<p style='margin-bottom:1rem;'>Opis: " . $row[1] . "</p>";
+                        }
+                    ?>
+                    <div id="brightness">
+                        <span>
+                            <label for="brightness">Jasność: </label>
+                            <span id="brightness_value">100%</span>
+                        </span>
+                        <input min=50 max=200 value=100 type="range" name="brightness" id="brightness_input"
+                            oninput="changeBrightness(this.value)">
+                    </div>
+                    <div id="contrast">
+                        <span>
+                            <label for="contrast">Kontrast: </label>
+                            <span id="contrast_value">100%</span>
+                        </span>
+                        <input min=50 max=200 value=100 type="range" name="contrast" id="contrast_input"
+                            oninput="changeContrast(this.value)">
+                    </div>
+                    <div id="lupa-top" style='margin-bottom:0.7rem'>
+                        <span>
+                            <label for="magnify-top">Włącz lupę dla awersu</label>
+                            <input type="checkbox" name="magnify-top" id="magnify-top" oninput=checkMagnify("top")>
+                        </span>
+                        <span class='lupa-value'>
+                            <input type="range" value=2 min=1.5 max=5 step=0.5 oninput=changeMagnifyTop(this.value)
+                                name="strength-top" id="strength-top">
+                            <span id='magnify-value-top' style='padding:15px'>2x</span>
+                        </span>
+                    </div>
+                    <div id="lupa-bot">
+                        <span>
+                            <label for="magnify-bot">Włącz lupę dla rewersu</label>
+                            <input type="checkbox" name="magnify-bot" id="magnify-bot" oninput=checkMagnify("bot")>
+                        </span>
+                        <span class='lupa-value'>
+                            <input type="range" value=2 min=1.5 max=5 step=0.5 oninput=changeMagnifyBot(this.value)
+                                name="strength-bot" id="strength-bot">
+                            <span id='magnify-value-bot' style='padding:15px'>2x</span>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
