@@ -1,0 +1,60 @@
+form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: flex-start;
+    align-items: stretch;
+}
+
+form>h2 {
+    margin-bottom: 1rem;
+}
+
+.input:not(:last-child) {
+    margin-bottom: 0.5rem;
+}
+
+.input {
+    display: flex;
+    flex-direction: row;
+}
+
+.input input {
+    margin-right: auto;
+}
+
+#opis {
+    display: inline-block;
+    /* line-height: 200%; */
+}
+
+.input-textarea {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+}
+
+.input input:not([type="file"]) {
+    display: inline-block;
+    width: 100%;
+}
+
+.input label {
+    margin-right: 5px;
+}
+
+.input textarea {
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    width: 100%;
+    resize: vertical;
+    font-size: medium;
+}
+
+#register {
+    display: none;
+}

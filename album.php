@@ -28,16 +28,22 @@ if (!isset($_GET['admin'])) {
 
 <body>
     <?php
-        foreach ($_GET as $key => $value) {
-            $_SESSION[$key] = $value;
-        }
-        if (isset($_POST['deleteCheck'])) {
-            $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-            $deleteQ = "DROP TABLE `" . $_SESSION['nazwa'] . "`;";
-            $query = mysqli_query($polaczenie, $deleteQ);
-            mysqli_close($polaczenie);
-            header("Location: home.php?admin=yes");
-        }
+    foreach ($_GET as $key => $value) {
+        $_SESSION[$key] = $value;
+    }
+    if (isset($_POST['deleteCheck'])) {
+        $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+        $deleteQ = "DROP TABLE `" . $_SESSION['nazwa'] . "`;";
+        $query = mysqli_query($polaczenie, $deleteQ);
+        mysqli_close($polaczenie);
+        header("Location: home.php?admin=yes");
+    }
+    if (isset($_POST['album'])) {
+        // $oldFace = "images/" . strval($_SESSION['album']) . "/face.tmp";
+        // unlink($oldFace);
+        $target_face = "images/" . strval($_SESSION['nazwa']) . "/face." . pathinfo($_FILES['zdjecie']['tmp_name'], PATHINFO_EXTENSION);
+        move_uploaded_file($_FILES['zdjecie']['tmp_name'], $target_face);
+    }
     ?>
     <div id="wrapper">
         <div id="banner">
@@ -85,6 +91,12 @@ if (!isset($_GET['admin'])) {
                     echo "<input type='text' name='album' id='album' value='" . $_SESSION['nazwa'] . "'>";
                 }
                 echo "</span>";
+                echo <<<EOL
+                <span class="input">
+                <label for="zdjecie">Zdjęcie albumu:&nbsp</label>
+                <input required type="file" id="zdjecie" name="zdjecie" accept=".jpg,.jpeg,.png,.jfif">
+                </span>
+                EOL;
                 echo "<input type='submit' style='background-color:#a0ffa0;' value='Zaakceptuj zmiany'>";
                 echo "<button type='button' id='delete' formmethod='post' form='form' style='background-color: #ff7373; margin-top: 1rem; width: 100%; cursor:pointer' onclick='usun(false)'>Usuń album</button>";
                 echo "</form></div>";

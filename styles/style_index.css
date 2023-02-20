@@ -109,3 +109,11 @@
     justify-content: center;
     flex-wrap: nowrap;
 }
+
+form .input {
+    display: flex;
+    margin-bottom: 0.5rem;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+}
