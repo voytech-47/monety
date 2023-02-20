@@ -15,12 +15,22 @@ function fadeOut(href) {
     window.location.replace(href);
 }
 
-function usun() {
-    if (confirm("⚠️Na pewno chcesz usunąć tę monetę? Tej operacji NIE DA SIĘ COFNĄĆ")) {
-        document.getElementById('deleteCheck').checked = true
-        document.getElementById('form').submit()
+function usun(mode) {
+    if (mode) {
+        if (confirm("⚠️Na pewno chcesz usunąć tę monetę? Tej operacji NIE DA SIĘ COFNĄĆ")) {
+            document.getElementById('deleteCheck').checked = true
+            document.getElementById('form').submit()
+        } else {
+            document.getElementById('deleteCheck').checked = false
+            return
+        }
     } else {
-        document.getElementById('deleteCheck').checked = false
-        return
+        if (confirm("⚠️Na pewno chcesz usunąć ten album? Tej operacji NIE DA SIĘ COFNĄĆ")) {
+            document.getElementById('deleteCheck').checked = true
+            document.getElementById('form').submit()
+        } else {
+            document.getElementById('deleteCheck').checked = false
+            return
+        }
     }
 }

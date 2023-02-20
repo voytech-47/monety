@@ -48,9 +48,9 @@ session_start();
         <div id="main">
             <?php
             if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                echo "<p style='text-align: left'>Wybierz, aby edytować album:</p>";
+                echo "<p style='text-align: center'>Wybierz, aby edytować album:</p>";
             } else {
-                echo "<p style='text-align: left'>Dostępne albumy:</p>";
+                echo "<p style='text-align: center'>Dostępne albumy:</p>";
             }
             ?>
             <div id="panels">
@@ -65,7 +65,7 @@ session_start();
                 $showQuery = "SHOW TABLES WHERE tables_in_monety NOT LIKE 'uzytkownicy'";
                 $tablesQuery = mysqli_query($polaczenie, $showQuery);
                 if (mysqli_num_rows($tablesQuery) == 0) {
-                    echo "<p style='text-align: left'>Brak albumów w bazie.</p>";
+                    echo "<p style='text-align: center'>Brak albumów w bazie.</p>";
                 } else {
                     while ($tables = mysqli_fetch_row($tablesQuery)) {
                         $newTables = str_replace(' ', '%20', $tables[0]);

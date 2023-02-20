@@ -144,7 +144,7 @@ if (!isset($_GET['admin'])) {
                     </span>
                     EOL;
                     echo "<input id='deleteCheck' name='deleteCheck' type='checkbox' style='display: none'>";
-                    echo "<button type='button' id='delete' formmethod='post' form='form' style='margin-bottom: 1rem; width: 100%' onclick='usun()'>Usuń monetę</button>";
+                    echo "<button type='button' id='delete' formmethod='post' form='form' style='margin-bottom: 1rem; width: 100%' onclick='usun(true)'>Usuń monetę</button>";
                     echo "<input type='submit' id='confirm' value='Zaakceptuj zmiany' style='margin-bottom: 1.5rem; width: 100%'>";
                     echo "</form>";
                     if (isset($_POST['nazwa'])) {
