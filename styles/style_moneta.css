@@ -149,3 +149,13 @@ input[type="range"] {
     resize: vertical;
     font-size: medium;
 }
+
+#delete {
+    background-color: #ff7373;
+    cursor: pointer;
+}
+
+#confirm {
+    background-color: #a0ffa0;
+    cursor: pointer;
+}

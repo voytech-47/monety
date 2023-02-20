@@ -100,7 +100,7 @@ if (!$_SESSION['zalogowany']) {
                 $target_rewers = "images/" . strval($_POST['album']) . "/" . basename($_FILES['rewers']['name']);
                 $fileType_awers = pathinfo($target_awers, PATHINFO_EXTENSION);
                 $fileType_rewers = pathinfo($target_rewers, PATHINFO_EXTENSION);
-                $allowed = array('jpg', 'jpeg', 'png', 'jfif');
+                $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
 
                 if (in_array($fileType_awers, $allowed) and in_array($fileType_rewers, $allowed)) {
                     move_uploaded_file($_FILES['awers']['tmp_name'], $target_awers);

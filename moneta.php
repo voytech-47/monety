@@ -26,6 +26,15 @@ if (!isset($_GET['admin'])) {
 </head>
 
 <body>
+    <?php
+    if (isset($_POST['deleteCheck'])) {
+        $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+        $deleteQ = "DELETE FROM `".$_SESSION['album']."` WHERE nazwa = '".$_SESSION['nazwa']."' LIMIT 1;";
+        $query = mysqli_query($polaczenie, $deleteQ);
+        mysqli_close($polaczenie);
+        header("Location: album.php?nazwa=".$_SESSION['album']."&admin=yes");
+    }
+    ?>
     <script src="./script/main.js"></script>
     <script src="script/moneta.js"></script>
     <div id="wrapper">
@@ -104,7 +113,7 @@ if (!isset($_GET['admin'])) {
                 $query2 = mysqli_query($polaczenie, $adminQuery);
                 $row = mysqli_fetch_row($query2);
                 echo <<<EOL
-                    <form action="moneta.php" method="post" enctype="multipart/form-data">
+                    <form id='form' action="moneta.php" method="post" enctype="multipart/form-data">
                     <span class="input" style="margin-bottom: 0.5rem">
                     <label for="nazwa" id="nazwa-label">Nazwa:</label>
                     EOL;
@@ -122,7 +131,9 @@ if (!isset($_GET['admin'])) {
                 else
                     echo '<textarea required name="opis" id="opis">' . $row[1] . '</textarea>';
                 echo "</span>";
-                echo "<input type='submit' value='Zaakceptuj zmiany' style='margin-bottom: 1.5rem; width: 100%'>";
+                echo "<input id='deleteCheck' name='deleteCheck' type='checkbox' style='display: none'>";
+                echo "<button type='button' id='delete' formmethod='post' form='form' style='margin-bottom: 1rem; width: 100%' onclick='usun()'>Usuń monetę</button>";
+                echo "<input type='submit' id='confirm' value='Zaakceptuj zmiany' style='margin-bottom: 1.5rem; width: 100%'>";
                 echo "</form>";
                 if (isset($_POST['nazwa'])) {
                     $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
