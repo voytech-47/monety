@@ -74,20 +74,15 @@ if (!isset($_GET['admin'])) {
             <div id="banner-bottom">
                 <?php
                 $backLink = str_replace(' ', '%20', $_SESSION['album']);
-                echo "<a onclick=fadeOut('./album.php?nazwa=" . $backLink . "')>Powrót do albumu: " . $_SESSION['album'] . "</a>";
+                if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
+                    echo "<a onclick=fadeOut('./album.php?nazwa=" . $backLink . "&admin=yes')>Powrót do albumu: " . $_SESSION['album'] . "</a>";
+                } else {
+                    echo "<a onclick=fadeOut('./album.php?nazwa=" . $backLink . "')>Powrót do albumu: " . $_SESSION['album'] . "</a>";
+                }
                 ?>
             </div>
         </div>
         <div id="main">
-            <div id="back">
-                <?php
-                if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
-                    echo "<a onclick=fadeOut('./album.php?nazwa=" . $_SESSION['album'] . "&admin=yes')>Powrót do albumu</a>";
-                } else {
-                    echo "<a onclick=fadeOut('./album.php?nazwa=" . $_SESSION['album'] . "')>Powrót do albumu</a>";
-                }
-                ?>
-            </div>
             <div class="panel">
                 <div class="panel-title">
                     <?php
@@ -103,8 +98,13 @@ if (!isset($_GET['admin'])) {
                     $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                     $query = mysqli_query($polaczenie, $showQuery);
                     $row = mysqli_fetch_row($query);
-                    echo "<span id='img-magnifier-glass-wrap-top'><img id='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "'></span>";
-                    echo "<span id='img-magnifier-glass-wrap-bot'><img id='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "'></span>";
+                    if (isset($_FILES['awers'])) {
+                        echo "<span id='img-magnifier-glass-wrap-top'><img id='img-top' src='images/" . $_SESSION['album'] . "/" . basename($_FILES['awers']['name']) . "'></span>";
+                        echo "<span id='img-magnifier-glass-wrap-bot'><img id='img-bot' src='images/" . $_SESSION['album'] . "/" . basename($_FILES['rewers']['name']) . "'></span>";
+                    } else {
+                        echo "<span id='img-magnifier-glass-wrap-top'><img id='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "'></span>";
+                        echo "<span id='img-magnifier-glass-wrap-bot'><img id='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "'></span>";
+                    }
                     ?>
                 </div>
             </div>
@@ -125,7 +125,7 @@ if (!isset($_GET['admin'])) {
                         echo '<input required type="text" name="nazwa" id="nazwa" value="' . $row[0] . '">';
                     echo <<<EOL
                     </span>
-                    <span class="input input-textarea">
+                    <span class="input" style="margin-bottom: 0.5rem">
                     <label for="opis" id="opis-label">Opis:</label>
                     EOL;
                     if (isset($_POST['nazwa']))
@@ -133,12 +133,39 @@ if (!isset($_GET['admin'])) {
                     else
                         echo '<textarea required name="opis" id="opis">' . $row[1] . '</textarea>';
                     echo "</span>";
+                    echo <<<EOL
+                    <span class="input" style="margin-bottom: 0.5rem">
+                    <label for="awers">Awers:</label>
+                    <input required type="file" name="awers" id="awers" accept=".jpg,.jpeg,.png,.jfif">
+                    </span>
+                    <span class="input" style="margin-bottom: 1rem">
+                    <label for="rewers">Rewers:</label>
+                    <input required type="file" name="rewers" id="rewers" accept=".jpg,.jpeg,.png,.jfif">
+                    </span>
+                    EOL;
                     echo "<input id='deleteCheck' name='deleteCheck' type='checkbox' style='display: none'>";
                     echo "<button type='button' id='delete' formmethod='post' form='form' style='margin-bottom: 1rem; width: 100%' onclick='usun()'>Usuń monetę</button>";
                     echo "<input type='submit' id='confirm' value='Zaakceptuj zmiany' style='margin-bottom: 1.5rem; width: 100%'>";
                     echo "</form>";
                     if (isset($_POST['nazwa'])) {
-                        $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
+                        $deleteQuery = "SELECT awers, rewers FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
+                        $deleteQ = mysqli_query($polaczenie, $deleteQuery);
+                        $row = mysqli_fetch_row($deleteQ);
+                        $oldAwers = "images/". strval($_SESSION['album']) . "/" . $row[0];
+                        $oldRewers = "images/". strval($_SESSION['album']) . "/" . $row[1];
+                        unlink($oldAwers);
+                        unlink($oldRewers);
+                        $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "', awers='".$_FILES['awers']['name']."', rewers='".$_FILES['rewers']['name']."' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
+                        $target_awers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['awers']['name']);
+                        $target_rewers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['rewers']['name']);
+                        $fileType_awers = pathinfo($target_awers, PATHINFO_EXTENSION);
+                        $fileType_rewers = pathinfo($target_rewers, PATHINFO_EXTENSION);
+                        $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
+        
+                        if (in_array($fileType_awers, $allowed) and in_array($fileType_rewers, $allowed)) {
+                            move_uploaded_file($_FILES['awers']['tmp_name'], $target_awers);
+                            move_uploaded_file($_FILES['rewers']['tmp_name'], $target_rewers);
+                        }
                         $query3 = mysqli_query($polaczenie, $updateQuery);
                     }
                     mysqli_close($polaczenie);
@@ -149,12 +176,12 @@ if (!isset($_GET['admin'])) {
                 ?>
                 <div id="settings">
                     <?php
-                        if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
-                        } else {
-                            echo"<p style='margin-bottom:.7rem'>Album: <i>" . $_SESSION['album'] . "</i></p>";
-                            echo "<p style='margin-bottom:.7rem'>Nazwa: <i>" . $row[0] . "</i></p>";
-                            echo "<p style='margin-bottom:1rem;'>Opis: " . $row[1] . "</p>";
-                        }
+                    if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
+                    } else {
+                        echo "<p style='margin-bottom:.7rem'>Album: <i>" . $_SESSION['album'] . "</i></p>";
+                        echo "<p style='margin-bottom:.7rem'>Nazwa: <i>" . $row[0] . "</i></p>";
+                        echo "<p style='margin-bottom:1rem;'>Opis: " . $row[1] . "</p>";
+                    }
                     ?>
                     <div id="brightness">
                         <span>
