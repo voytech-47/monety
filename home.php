@@ -47,11 +47,11 @@ session_start();
         </div>
         <div id="main">
             <?php
-                if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                    echo "<p style='text-align: left'>Wybierz, aby edytować album:</p>";
-                } else {
-                    echo "<p style='text-align: left'>Dostępne albumy:</p>";
-                }
+            if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                echo "<p style='text-align: left'>Wybierz, aby edytować album:</p>";
+            } else {
+                echo "<p style='text-align: left'>Dostępne albumy:</p>";
+            }
             ?>
             <div id="panels">
                 <?php
@@ -68,15 +68,16 @@ session_start();
                     echo "<p style='text-align: left'>Brak albumów w bazie.</p>";
                 } else {
                     while ($tables = mysqli_fetch_row($tablesQuery)) {
+                        $newTables = str_replace(' ', '%20', $tables[0]);
                         echo "<div class='panel'>
                     <div class='panel-title'>
                     <h1>" . $tables[0] . "</h1>
                                 </div>";
                         echo "<div class='panel-main'>";
                         if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $tables[0] . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $newTables . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                         } else {
-                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $tables[0] . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $newTables . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                         }
                         echo "</div></div>";
                     }

@@ -1,3 +1,11 @@
+window.onload = function() {
+    document.querySelectorAll('.img-top').forEach(element => {
+        console.log(element.nextElementSibling.clientHeight)
+        if (element.clientHeight <= element.nextElementSibling.clientHeight)
+            element.parentNode.parentNode.style.height = element.nextElementSibling.clientHeight + "px"
+    })
+}
+
 function fadeOut(href) {
     // document.body.style = ''
     document.body.style = "animation: fadeOut ease 0.1s; animation-iteration-count: 1; animation-fill-mode: backwards;"

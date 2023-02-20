@@ -29,10 +29,10 @@ if (!isset($_GET['admin'])) {
     <?php
     if (isset($_POST['deleteCheck'])) {
         $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-        $deleteQ = "DELETE FROM `".$_SESSION['album']."` WHERE nazwa = '".$_SESSION['nazwa']."' LIMIT 1;";
+        $deleteQ = "DELETE FROM `" . $_SESSION['album'] . "` WHERE nazwa = '" . $_SESSION['nazwa'] . "' LIMIT 1;";
         $query = mysqli_query($polaczenie, $deleteQ);
         mysqli_close($polaczenie);
-        header("Location: album.php?nazwa=".$_SESSION['album']."&admin=yes");
+        header("Location: album.php?nazwa=" . $_SESSION['album'] . "&admin=yes");
     }
     ?>
     <script src="./script/main.js"></script>
@@ -102,8 +102,8 @@ if (!isset($_GET['admin'])) {
                     $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                     $query = mysqli_query($polaczenie, $showQuery);
                     $row = mysqli_fetch_row($query);
-                    echo "<img id='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "'>";
-                    echo "<img id='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "'>";
+                    echo "<span id='img-magnifier-glass-wrap-top'><img id='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "'></span>";
+                    echo "<span id='img-magnifier-glass-wrap-bot'><img id='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "'></span>";
                     ?>
                 </div>
             </div>
@@ -127,7 +127,7 @@ if (!isset($_GET['admin'])) {
                     <label for="opis" id="opis-label">Opis:</label>
                     EOL;
                 if (isset($_POST['nazwa']))
-                    echo '<textarea required name="opis" id="opis">' . $_POST['opis']. '</textarea>';
+                    echo '<textarea required name="opis" id="opis">' . $_POST['opis'] . '</textarea>';
                 else
                     echo '<textarea required name="opis" id="opis">' . $row[1] . '</textarea>';
                 echo "</span>";
@@ -164,9 +164,54 @@ if (!isset($_GET['admin'])) {
                     <input min=50 max=200 value=100 type="range" name="contrast" id="contrast_input"
                         oninput="changeContrast(this.value)">
                 </div>
+                <div id="lupa-top" style='margin-bottom:0.7rem'>
+                    <span>
+                        <label for="magnify-top">Włącz lupę dla awersu</label>
+                        <input type="checkbox" name="magnify-top" id="magnify-top" oninput=checkMagnify("top")>
+                    </span>
+                    <span class='lupa-value'>
+                        <input type="range" value=2 min=1.5 max=5 step=0.5 oninput=changeMagnifyTop(this.value) name="strength-top" id="strength-top">
+                        <span id='magnify-value-top' style='padding:15px'>2x</span>
+                    </span>
+                </div>
+                <div id="lupa-bot">
+                    <span>
+                        <label for="magnify-bot">Włącz lupę dla rewersu</label>
+                        <input type="checkbox" name="magnify-bot" id="magnify-bot" oninput=checkMagnify("bot")>
+                    </span>
+                    <span class='lupa-value'>
+                        <input type="range" value=2 min=1.5 max=5 step=0.5 oninput=changeMagnifyBot(this.value) name="strength-bot" id="strength-bot">
+                        <span id='magnify-value-bot' style='padding:15px'>2x</span>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        function checkMagnify(value) {
+            if (value == "top") {
+                if (!document.getElementById('magnify-top').checked) {
+                    document.getElementById('img-magnifier-glass-top').remove()
+                    return
+                }
+                if (document.getElementById('magnify-bot').checked) {
+                    document.getElementById('img-magnifier-glass-bot').remove()
+                    document.getElementById('magnify-bot').checked = false
+                }
+                magnify('top', 'img-top', 2)
+            } else {
+                if (!document.getElementById('magnify-bot').checked) {
+                    document.getElementById('img-magnifier-glass-bot').remove()
+                    return
+                }
+                if (document.getElementById('magnify-top').checked) {
+                    document.getElementById('img-magnifier-glass-top').remove()
+                    document.getElementById('magnify-top').checked = false
+                }
+                magnify('bot', 'img-bot', 2)
+            }
+        }
+    </script>
 </body>
 
 </html>

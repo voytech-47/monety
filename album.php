@@ -27,7 +27,6 @@ if (!isset($_GET['admin'])) {
 </head>
 
 <body>
-    <script src="./script/main.js"></script>
     <div id="wrapper">
         <div id="banner">
             <ul id="options">
@@ -71,16 +70,16 @@ if (!isset($_GET['admin'])) {
                 <label for='album'>Album:&nbsp</label>
                 EOL;
                 if (isset($_POST['album'])) {
-                    echo "<input type='text' name='album' id='album' value='".$_POST['album']."'>";
+                    echo "<input type='text' name='album' id='album' value='" . $_POST['album'] . "'>";
                 } else {
-                    echo "<input type='text' name='album' id='album' value='".$_SESSION['nazwa']."'>";
+                    echo "<input type='text' name='album' id='album' value='" . $_SESSION['nazwa'] . "'>";
                 }
                 echo "</span>";
                 echo "<input type='submit' value='Zmień nazwę'>";
                 echo "</form></div>";
             } else {
                 if (isset($_POST['album'])) {
-                    echo "<h1>Album: " . $_POST['album'] . "</h1>";    
+                    echo "<h1>Album: " . $_POST['album'] . "</h1>";
                 } else {
                     echo "<h1>Album: " . $_GET['nazwa'] . "</h1>";
                 }
@@ -99,54 +98,56 @@ if (!isset($_GET['admin'])) {
                     echo "</span>";
                 }
                 ?>
-            <div id="panels">
-                <?php
-                // if (!isset($_GET['nazwa'])) {
-                //     header("Location: home.php");
-                // }
-                $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-                $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['nazwa'] . "`;";
-                $query = mysqli_query($polaczenie, $showQuery);
-                if (mysqli_num_rows($query) == 0) {
-                    echo "<p style='text-align: left; margin-bottom: 1rem'>Brak monet w albumie.</p>";
-                } else {
-                    while ($row = mysqli_fetch_row($query)) {
-                        echo "<div class='panel'>";
-                        echo "<div class='panel-title'>";
-                        echo "<h1>" . $row[0] . "</h1>";
-                        echo "</div>";
-                        echo "<div class='panel-main'>";
-                        $newRow = str_replace(' ', '%20', $row[0]);
-                        if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                            echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_SESSION["nazwa"] . '&admin=yes")>';
-                        } else {
-                            echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_SESSION["nazwa"] . '")>';
-                        }
-                        echo "<img class='img-top' src='images/" . $_SESSION['nazwa'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
+                <div id="panels">
+                    <?php
+                    // if (!isset($_GET['nazwa'])) {
+                    //     header("Location: home.php");
+                    // }
+                    $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+                    $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['nazwa'] . "`;";
+                    $query = mysqli_query($polaczenie, $showQuery);
+                    if (mysqli_num_rows($query) == 0) {
+                        echo "<p style='text-align: left; margin-bottom: 1rem'>Brak monet w albumie.</p>";
+                    } else {
+                        while ($row = mysqli_fetch_row($query)) {
+                            echo "<div class='panel'>";
+                            echo "<div class='panel-title'>";
+                            echo "<h1>" . $row[0] . "</h1>";
+                            echo "</div>";
+                            echo "<div class='panel-main'>";
+                            $row[0] = str_replace(' ', '%20', $row[0]);
+                            $_SESSION['nazwa'] = str_replace(' ', '%20', $_SESSION['nazwa']);
+                            if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                                echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["nazwa"] . '&admin=yes")>';
+                            } else {
+                                echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["nazwa"] . '")>';
+                            }
+                            echo "<img class='img-top' src='images/" . $_SESSION['nazwa'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
                           <img class='img-bot' src='images/" . $_SESSION['nazwa'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
                           </a>";
-                        // echo "<p class='opis'>" . $row[1] . "</p>";
-                        echo "</div>";
-                        echo "</div>";
+                            // echo "<p class='opis'>" . $row[1] . "</p>";
+                            echo "</div>";
+                            echo "</div>";
+                        }
                     }
-                }
+                    if (isset($_POST['album'])) {
+                        $updateQuery = "RENAME TABLE `" . $_SESSION['nazwa'] . "` TO `" . $_POST['album'] . "`;";
+                        $query2 = mysqli_query($polaczenie, $updateQuery);
+                        $old = "./images/" . $_SESSION['nazwa'];
+                        $new = "./images/" . $_POST['album'];
+                        rename($old, $new);
+                        mysqli_close($polaczenie);
+                    }
+                    ?>
+                </div>
+                <?php
                 if (isset($_POST['album'])) {
-                    $updateQuery = "RENAME TABLE `".$_SESSION['nazwa']."` TO `".$_POST['album']."`;";
-                    $query2 = mysqli_query($polaczenie, $updateQuery);
-                    $old = "./images/".$_SESSION['nazwa'];
-                    $new = "./images/".$_POST['album'];
-                    rename($old, $new);
-                    mysqli_close($polaczenie);
-                    }
-                ?>
-            </div>
-            <?php
-            if (isset($_POST['album'])) {
                     echo "<p style='margin-top:1.5rem; text-align: left'>Informacje zostały zaktualizowane</p>";
-            }
-            ?>
+                }
+                ?>
         </div>
     </div>
+    <script src="./script/main.js"></script>
 </body>
 
 </html>
