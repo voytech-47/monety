@@ -118,9 +118,9 @@ if (!isset($_GET['admin'])) {
                         echo "<div class='panel-main'>";
                         $newRow = str_replace(' ', '%20', $row[0]);
                         if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                            echo '<a onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_SESSION["nazwa"] . '&admin=yes")>';
+                            echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_SESSION["nazwa"] . '&admin=yes")>';
                         } else {
-                            echo '<a onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_SESSION["nazwa"] . '")>';
+                            echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $newRow . '&album=' . $_SESSION["nazwa"] . '")>';
                         }
                         echo "<img class='img-top' src='images/" . $_SESSION['nazwa'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
                           <img class='img-bot' src='images/" . $_SESSION['nazwa'] . "/" . $row[3] . "' alt='" . $row[0] . "'>

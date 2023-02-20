@@ -24,19 +24,32 @@
     color: #fa4807;
 }
 
-.img-top,
-.img-bot {
-    cursor: pointer;
+.img-top {
+    transition: opacity 0.3s;
+    opacity: 1;
 }
 
-.img-top {
+.img-bot {
     transition: opacity 0.3s;
     position: absolute;
     top: 0;
+    opacity: 0;
+    /* left: 0; */
 }
 
-.img-top:hover {
-    opacity: 0;
+#img-cover {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        display: block;
+}
+
+#img-wrap:hover > .img-top {
+    opacity: 0 !important;
+}
+
+#img-wrap:hover .img-bot {
+    opacity: 1 !important;
 }
 
 #main {

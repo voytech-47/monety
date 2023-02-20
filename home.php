@@ -74,9 +74,9 @@ session_start();
                                 </div>";
                         echo "<div class='panel-main'>";
                         if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $tables[0] . "&admin=yes')><img class='img-bot' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $tables[0] . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                         } else {
-                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $tables[0] . "')><img class='img-bot' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $tables[0] . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                         }
                         echo "</div></div>";
                     }
