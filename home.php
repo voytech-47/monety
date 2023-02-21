@@ -75,9 +75,9 @@ session_start();
                                 </div>";
                         echo "<div class='panel-main'>";
                         if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $newTables . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                         } else {
-                            echo "<a onclick=fadeOut('./album.php?nazwa=" . $newTables . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                         }
                         echo "</div></div>";
                     }
@@ -85,6 +85,11 @@ session_start();
 
                 ?>
             </div>
+            <?php
+            if (isset($_GET['changed'])) {
+                echo "<p style='margin-top:1.5rem; text-align: center'>Informacje zostały zaktualizowane</p>";
+            }
+            ?>
         </div>
     </div>
 </body>
