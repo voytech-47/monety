@@ -1,3 +1,11 @@
+function moveCoin(value) {
+    if (confirm("⚠️Na pewno chcesz przenieś tę monetę do albumu "+value+"?")) {
+        document.getElementById('form').submit()
+    } else {
+        return
+    }
+}
+
 function changeBrightness(value) {
     if (document.getElementById("img-magnifier-glass-top") != null) {
         document.getElementById("img-magnifier-glass-top").style.filter = "brightness("+document.getElementById("brightness_input").value+"%) contrast(" + document.getElementById("contrast_input").value + "%)";

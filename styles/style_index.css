@@ -119,3 +119,7 @@ form .input {
     align-items: baseline;
     justify-content: flex-start;
 }
+
+input[type='text'] {
+    width: 100%;
+}

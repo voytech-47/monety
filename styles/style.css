@@ -211,3 +211,7 @@ a {
     align-items: flex-start;
     align-content: flex-start;
 }
+
+input[type='file'] {
+    max-width: 337px;
+}

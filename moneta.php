@@ -32,11 +32,9 @@ if (!isset($_GET['admin'])) {
         $deleteQ = "DELETE FROM `" . $_SESSION['album'] . "` WHERE nazwa = '" . $_SESSION['nazwa'] . "' LIMIT 1;";
         $query = mysqli_query($polaczenie, $deleteQ);
         mysqli_close($polaczenie);
-        header("Location: album.php?nazwa=" . $_SESSION['album'] . "&admin=yes");
+        header("Location: album.php?album=" . $_SESSION['album'] . "&admin=yes");
     }
     ?>
-    <script src="./script/main.js"></script>
-    <script src="script/moneta.js"></script>
     <div id="wrapper">
         <div id="banner">
             <ul id="options">
@@ -49,23 +47,23 @@ if (!isset($_GET['admin'])) {
                 }
                 if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
                     echo <<<EOL
-                        <li>
-                            <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
-                        </li>
-                        <li>
-                            <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
-                        </li>
-                        <li>
-                            <a onclick=fadeOut("./home.php?admin=yes")>Panel administratora</a>
-                        </li>
-                        <li>
-                            <a onclick=fadeOut("./index.php")>Wyloguj się</a>
-                        </li>
-                        EOL;
+                    <li>
+                    <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
+                    </li>
+                    <li>
+                    <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
+                    </li>
+                    <li>
+                    <a onclick=fadeOut("./home.php?admin=yes")>Panel administratora</a>
+                    </li>
+                    <li>
+                    <a onclick=fadeOut("./index.php")>Wyloguj się</a>
+                    </li>
+                    EOL;
                 } else {
                     echo <<<EOL
                         <li>
-                            <a onclick=fadeOut("./index.php")>Zaloguj się</a>
+                        <a onclick=fadeOut("./index.php")>Zaloguj się</a>
                         </li>
                         EOL;
                 }
@@ -138,9 +136,27 @@ if (!isset($_GET['admin'])) {
                     <label for="awers">Awers:</label>
                     <input type="file" name="awers" id="awers" accept=".jpg,.jpeg,.png,.jfif">
                     </span>
-                    <span class="input" style="margin-bottom: 1rem">
+                    <span class="input" style="margin-bottom: 0.5rem">
                     <label for="rewers">Rewers:</label>
                     <input type="file" name="rewers" id="rewers" accept=".jpg,.jpeg,.png,.jfif">
+                    </span>
+                    <span class="input" style="margin-bottom: 1rem">
+                    <label for="move">Przenieś do:</label>
+                    EOL;
+                    $showQuery = "SHOW TABLES WHERE tables_in_monety NOT LIKE 'uzytkownicy'";
+                    $query = mysqli_query($polaczenie, $showQuery);
+                    echo "<select name='move' id='move' onchange=moveCoin(this.value)>";
+                    while ($row = mysqli_fetch_row($query)) {
+                        if ($row[0] == $_SESSION['album']) {
+                            echo "<option selected disabled value='" . $row[0] . "'>" . $row[0] . "</option>";
+                        } else {
+                            echo "<option value='" . $row[0] . "'>" . $row[0] . "</option>";
+                        }
+                    }
+                    echo "</select>";
+                    echo "</span>";
+                    echo <<<EOL
+                    </select>
                     </span>
                     EOL;
                     echo "<input id='deleteCheck' name='deleteCheck' type='checkbox' style='display: none'>";
@@ -175,6 +191,32 @@ if (!isset($_GET['admin'])) {
                                 move_uploaded_file($_FILES['rewers']['tmp_name'], $target_rewers);
                             }
                             $query5 = mysqli_query($polaczenie, $updateRewers);
+                        }
+                        if (isset($_POST['move'])) {
+                            mysqli_begin_transaction($polaczenie);
+                            $imagesQ = "SELECT awers, rewers FROM `%s` WHERE nazwa = '%s';";
+                            $query6 = mysqli_query($polaczenie, sprintf($imagesQ, $_SESSION['album'], $_POST['nazwa']));
+                            $row = mysqli_fetch_row($query6);
+                            $oldDirAwers = "images/" . $_SESSION['album'] . "/" . $row[0];
+                            $oldDirRewers = "images/" . $_SESSION['album'] . "/" . $row[1];
+                            $newDirAwers = "images/" . $_POST['move'] . "/" . $row[0];
+                            $newDirRewers = "images/" . $_POST['move'] . "/" . $row[1];
+                            rename($oldDirAwers, $newDirAwers);
+                            rename($oldDirRewers, $newDirRewers);
+                            try {
+                                $tempInsert = "INSERT INTO `%s` SELECT * FROM `%s` WHERE nazwa = '%s';";
+                                $tempDelete = "DELETE FROM `%s` WHERE nazwa = '%s';";
+                                $query7 = sprintf($tempInsert, $_POST['move'], $_SESSION['album'], $_POST['nazwa']);
+                                $query8 = sprintf($tempDelete, $_SESSION['album'], $_POST['nazwa']);
+                                mysqli_query($polaczenie, $query7);
+                                mysqli_query($polaczenie, $query8);
+                                mysqli_commit($polaczenie);
+                                mysqli_close($polaczenie);
+                                header("Location: album.php?album=" . $_SESSION['album'] . "&admin=yes");
+                            } catch (mysqli_sql_exception $e) {
+                                mysqli_rollback($polaczenie);
+                                throw $e;
+                            }
                         }
                     }
                     mysqli_close($polaczenie);
@@ -234,6 +276,8 @@ if (!isset($_GET['admin'])) {
             </div>
         </div>
     </div>
+    <script src="./script/main.js"></script>
+    <script src="script/moneta.js"></script>
     <script>
         function checkMagnify(value) {
             if (value == "top") {

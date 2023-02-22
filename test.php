@@ -1,12 +1,19 @@
 <html lang="pl">
 <meta charset='utf-8'>
-<?php
-$sortQuery = array(
-    "alphaAsc" => "ORDER BY `nazwa` ASC",
-    "alphaDesc" => "ORDER BY `nazwa` DESC",
-    "dateDesc" => "ORDER BY `id` DESC",
-    "dateAsc" => "ORDER BY `id` ASC"
-);
-$post = "alphaDesc";
-echo $sortQuery[$post];
-?>
+
+<body>
+
+    <p id="test"></p>
+    <form id='form' action="" method="post">
+        <select name="move" id="move" onchange=function move(this.value) {document.getElementById('form').submit(); document.getElementById('test').innerHTML = value}>
+            <option value="chuj">chuj</option>
+            <option value="asd">asd</option>
+        </select>
+    </form>
+    <script>
+        function move(value) {
+            document.getElementById('form').submit()
+            document.getElementById('test').innerHTML = value
+        }
+    </script>
+</body>
