@@ -98,7 +98,7 @@ if (!isset($_GET['admin'])) {
                     $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                     $query = mysqli_query($polaczenie, $showQuery);
                     $row = mysqli_fetch_row($query);
-                    if (isset($_FILES['awers'])) {
+                    if (!empty($_FILES['awers']['name'])) {
                         echo "<span id='img-magnifier-glass-wrap-top'><img id='img-top' src='images/" . $_SESSION['album'] . "/" . basename($_FILES['awers']['name']) . "'></span>";
                         echo "<span id='img-magnifier-glass-wrap-bot'><img id='img-bot' src='images/" . $_SESSION['album'] . "/" . basename($_FILES['rewers']['name']) . "'></span>";
                     } else {
@@ -129,44 +129,53 @@ if (!isset($_GET['admin'])) {
                     <label for="opis" id="opis-label">Opis:</label>
                     EOL;
                     if (isset($_POST['nazwa']))
-                        echo '<textarea required name="opis" id="opis">' . $_POST['opis'] . '</textarea>';
+                        echo '<textarea name="opis" id="opis">' . $_POST['opis'] . '</textarea>';
                     else
-                        echo '<textarea required name="opis" id="opis">' . $row[1] . '</textarea>';
+                        echo '<textarea name="opis" id="opis">' . $row[1] . '</textarea>';
                     echo "</span>";
                     echo <<<EOL
                     <span class="input" style="margin-bottom: 0.5rem">
                     <label for="awers">Awers:</label>
-                    <input required type="file" name="awers" id="awers" accept=".jpg,.jpeg,.png,.jfif">
+                    <input type="file" name="awers" id="awers" accept=".jpg,.jpeg,.png,.jfif">
                     </span>
                     <span class="input" style="margin-bottom: 1rem">
                     <label for="rewers">Rewers:</label>
-                    <input required type="file" name="rewers" id="rewers" accept=".jpg,.jpeg,.png,.jfif">
+                    <input type="file" name="rewers" id="rewers" accept=".jpg,.jpeg,.png,.jfif">
                     </span>
                     EOL;
                     echo "<input id='deleteCheck' name='deleteCheck' type='checkbox' style='display: none'>";
-                    echo "<button type='button' id='delete' formmethod='post' form='form' style='margin-bottom: 1rem; width: 100%' onclick='usun(true)'>Usuń monetę</button>";
-                    echo "<input type='submit' id='confirm' value='Zaakceptuj zmiany' style='margin-bottom: 1.5rem; width: 100%'>";
+                    echo "<input type='submit' id='confirm' value='Zaakceptuj zmiany' style='margin-bottom: 1rem; width: 100%'>";
+                    echo "<button type='button' id='delete' formmethod='post' form='form' style='margin-bottom: 1.5rem; width: 100%' onclick='usun(true)'>Usuń monetę</button>";
                     echo "</form>";
                     if (isset($_POST['nazwa'])) {
                         $deleteQuery = "SELECT awers, rewers FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                         $deleteQ = mysqli_query($polaczenie, $deleteQuery);
                         $row = mysqli_fetch_row($deleteQ);
-                        $oldAwers = "images/". strval($_SESSION['album']) . "/" . $row[0];
-                        $oldRewers = "images/". strval($_SESSION['album']) . "/" . $row[1];
-                        unlink($oldAwers);
-                        unlink($oldRewers);
-                        $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "', awers='".$_FILES['awers']['name']."', rewers='".$_FILES['rewers']['name']."' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
-                        $target_awers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['awers']['name']);
-                        $target_rewers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['rewers']['name']);
-                        $fileType_awers = pathinfo($target_awers, PATHINFO_EXTENSION);
-                        $fileType_rewers = pathinfo($target_rewers, PATHINFO_EXTENSION);
-                        $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
-        
-                        if (in_array($fileType_awers, $allowed) and in_array($fileType_rewers, $allowed)) {
-                            move_uploaded_file($_FILES['awers']['tmp_name'], $target_awers);
-                            move_uploaded_file($_FILES['rewers']['tmp_name'], $target_rewers);
-                        }
+                        $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
                         $query3 = mysqli_query($polaczenie, $updateQuery);
+                        $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
+                        if ($_FILES['awers']['name'] != "") {
+                            $oldAwers = "images/" . strval($_SESSION['album']) . "/" . $row[0];
+                            unlink($oldAwers);
+                            $updateAwers = "UPDATE `" . $_SESSION['album'] . "` SET awers='" . $_FILES['awers']['name'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
+                            $target_awers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['awers']['name']);
+                            $fileType_awers = pathinfo($target_awers, PATHINFO_EXTENSION);
+                            if (in_array($fileType_awers, $allowed)) {
+                                move_uploaded_file($_FILES['awers']['tmp_name'], $target_awers);
+                            }
+                            $query4 = mysqli_query($polaczenie, $updateAwers);
+                        }
+                        if ($_FILES['rewers']['name'] != "") {
+                            $oldRewers = "images/" . strval($_SESSION['album']) . "/" . $row[1];
+                            unlink($oldRewers);
+                            $updateRewers = "UPDATE `" . $_SESSION['album'] . "` SET rewers='" . $_FILES['rewers']['name'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
+                            $target_rewers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['rewers']['name']);
+                            $fileType_rewers = pathinfo($target_rewers, PATHINFO_EXTENSION);
+                            if (in_array($fileType_rewers, $allowed)) {
+                                move_uploaded_file($_FILES['rewers']['tmp_name'], $target_rewers);
+                            }
+                            $query5 = mysqli_query($polaczenie, $updateRewers);
+                        }
                     }
                     mysqli_close($polaczenie);
                     if (isset($_POST['nazwa'])) {

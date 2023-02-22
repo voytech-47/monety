@@ -111,12 +111,41 @@ if (!isset($_GET['admin'])) {
         <div id="main">
             <span id='back-span'>
                 <?php
+                $sortDict = array(
+                    "alphaAsc" => "Alfabetycznie",
+                    "alphaDesc" => "Od Z do A",
+                    "dateDesc" => "Od najnowszych",
+                    "dateAsc" => "Od najstarszych"
+                );
                 if ((isset($_GET['admin']) and $_GET['admin'] == "yes") or (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes")) {
                     echo "<a class='back' onclick=fadeOut('./home.php?admin=yes')>Powrót do panelu administratora</a>";
                     echo "</span>";
                     echo "<p style='text-align: center; margin-bottom: 0.5rem; margin-top: 1rem'>Wybierz monetę, aby edytować</p>";
                 } else {
                     echo "<a class='back' onclick=fadeOut('./home.php')>Powrót do albumów</a>";
+                    echo <<<EOL
+                    <form method='post'>
+                    <select name='sort' id='sort' onchange='this.form.submit()' style='margin-top: 1rem'>
+                    EOL;
+                    if (!isset($_POST['sort'])) {
+                        echo "<option selected disabled value='def'>Sortuj...</option>";
+                        foreach ($sortDict as $key => $value) {
+                            echo "<option value='" . $key . "'>" . $value . "</option>";
+                        }
+                    } else {
+                        echo "<option disabled value='def'>Sortuj...</option>";
+                        foreach ($sortDict as $key => $value) {
+                            if ($_POST['sort'] == $key) {
+                                echo "<option selected value='" . $key . "'>" . $value . "</option>";
+                            } else {
+                                echo "<option value='" . $key . "'>" . $value . "</option>";
+                            }
+                        }
+                    }
+                    echo <<<EOL
+                    </select>
+                    </form>
+                    EOL;
                     echo "</span>";
                 }
                 ?>
@@ -126,7 +155,17 @@ if (!isset($_GET['admin'])) {
                     //     header("Location: home.php");
                     // }
                     $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-                    $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "`;";
+                    $sortQuery = array(
+                        "alphaAsc" => "ORDER BY `nazwa` ASC",
+                        "alphaDesc" => "ORDER BY `nazwa` DESC",
+                        "dateDesc" => "ORDER BY `id` DESC",
+                        "dateAsc" => "ORDER BY `id` ASC"
+                    );
+                    if (isset($_POST['sort'])) {
+                        $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "` ".$sortQuery[$_POST['sort']].";";
+                    } else {
+                        $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "`;";
+                    }
                     $query = mysqli_query($polaczenie, $showQuery);
                     if (mysqli_num_rows($query) == 0) {
                         echo "<p style='text-align: center; margin-bottom: 1rem'>Brak monet w albumie.</p>";
@@ -142,7 +181,7 @@ if (!isset($_GET['admin'])) {
                             if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
                                 echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '&admin=yes")>';
                             } else {
-                                echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["nazwa"] . '")>';
+                                echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '")>';
                             }
                             echo "<img class='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
                           <img class='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "' alt='" . $row[0] . "'>

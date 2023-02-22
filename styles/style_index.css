@@ -89,8 +89,10 @@
 
 #back-span {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin-bottom: 0.4rem;
+    align-items: center;
 }
 
 #banner-input {

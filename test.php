@@ -1,12 +1,12 @@
 <html lang="pl">
 <meta charset='utf-8'>
 <?php
-$str = 'orzeł';
- 
-if (preg_match('/^(?!.*\borzeł\b).*$/u', $str))
-{   echo 'pass';
-}
-else
-{   echo 'no pass';
-}
+$sortQuery = array(
+    "alphaAsc" => "ORDER BY `nazwa` ASC",
+    "alphaDesc" => "ORDER BY `nazwa` DESC",
+    "dateDesc" => "ORDER BY `id` DESC",
+    "dateAsc" => "ORDER BY `id` ASC"
+);
+$post = "alphaDesc";
+echo $sortQuery[$post];
 ?>
