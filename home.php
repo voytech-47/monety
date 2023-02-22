@@ -55,7 +55,9 @@ session_start();
                     "alphaAsc" => "Alfabetycznie",
                     "alphaDesc" => "Od Z do A",
                     "dateDesc" => "Od najnowszych",
-                    "dateAsc" => "Od najstarszych"
+                    "dateAsc" => "Od najstarszych",
+                    "updateDesc" => "Najnowsza edycja",
+                    "updateAsc" => "Najstarsza edycja"
                 );
                 echo "<span id='back-span'>";
                 echo "<p style='text-align: center'>Dostępne albumy:</p>";

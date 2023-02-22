@@ -116,7 +116,9 @@ if (!isset($_GET['admin'])) {
                     "alphaAsc" => "Alfabetycznie",
                     "alphaDesc" => "Od Z do A",
                     "dateDesc" => "Od najnowszych",
-                    "dateAsc" => "Od najstarszych"
+                    "dateAsc" => "Od najstarszych",
+                    "updateDesc" => "Najnowsza edycja",
+                    "updateAsc" => "Najstarsza edycja"
                 );
                 if ((isset($_GET['admin']) and $_GET['admin'] == "yes") or (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes")) {
                     echo "<a class='back' onclick=fadeOut('./home.php?admin=yes')>Powrót do panelu administratora</a>";
