@@ -32,7 +32,8 @@ if (!isset($_GET['admin'])) {
     }
     if (isset($_POST['deleteCheck'])) {
         $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-        $deleteQ = "DROP TABLE `" . $_SESSION['album'] . "`;";
+        $dropTable = str_replace('%20', ' ', $_SESSION['album']);
+        $deleteQ = "DROP TABLE `" . $dropTable . "`;";
         $query = mysqli_query($polaczenie, $deleteQ);
         mysqli_close($polaczenie);
         header("Location: home.php?admin=yes");
@@ -159,7 +160,9 @@ if (!isset($_GET['admin'])) {
                         "alphaAsc" => "ORDER BY `nazwa` ASC",
                         "alphaDesc" => "ORDER BY `nazwa` DESC",
                         "dateDesc" => "ORDER BY `id` DESC",
-                        "dateAsc" => "ORDER BY `id` ASC"
+                        "dateAsc" => "ORDER BY `id` ASC",
+                        "updateDesc" => "ORDER BY `time` DESC",
+                        "updateAsc" => "ORDER BY `time` ASC"
                     );
                     if (isset($_POST['sort'])) {
                         $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "` ".$sortQuery[$_POST['sort']].";";

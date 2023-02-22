@@ -50,7 +50,39 @@ session_start();
             if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
                 echo "<p style='text-align: center'>Wybierz, aby edytować album:</p>";
             } else {
+                $_SESSION['admin'] = "no";
+                $sortDict = array(
+                    "alphaAsc" => "Alfabetycznie",
+                    "alphaDesc" => "Od Z do A",
+                    "dateDesc" => "Od najnowszych",
+                    "dateAsc" => "Od najstarszych"
+                );
+                echo "<span id='back-span'>";
                 echo "<p style='text-align: center'>Dostępne albumy:</p>";
+                echo <<<EOL
+                <form method='post'>
+                <select name='sort' id='sort' onchange='this.form.submit()' style='margin-top: 1rem'>
+                EOL;
+                if (!isset($_POST['sort'])) {
+                    echo "<option selected disabled value='def'>Sortuj...</option>";
+                    foreach ($sortDict as $key => $value) {
+                        echo "<option value='" . $key . "'>" . $value . "</option>";
+                    }
+                } else {
+                    echo "<option disabled value='def'>Sortuj...</option>";
+                    foreach ($sortDict as $key => $value) {
+                        if ($_POST['sort'] == $key) {
+                            echo "<option selected value='" . $key . "'>" . $value . "</option>";
+                        } else {
+                            echo "<option value='" . $key . "'>" . $value . "</option>";
+                        }
+                    }
+                }
+                echo <<<EOL
+                </select>
+                </form>
+                </span>
+                EOL;
             }
             ?>
             <div id="panels">
@@ -62,7 +94,19 @@ session_start();
                     mysqli_query($polaczenie, "CREATE DATABASE `monety`;");
                     mysqli_query($polaczenie, "USE `monety`;");
                 }
-                $showQuery = "SHOW TABLES WHERE tables_in_monety NOT LIKE 'uzytkownicy'";
+                $sortQuery = array(
+                    "alphaAsc" => "ORDER BY TABLE_NAME ASC",
+                    "alphaDesc" => "ORDER BY TABLE_NAME DESC",
+                    "dateDesc" => "ORDER BY CREATE_TIME DESC",
+                    "dateAsc" => "ORDER BY CREATE_TIME ASC",
+                    "updateDesc" => "ORDER BY CREATE_TIME DESC",
+                    "updateAsc" => "ORDER BY CREATE_TIME ASC"
+                );
+                if (isset($_POST['sort'])) {
+                    $showQuery = "SELECT table_name, engine FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND TABLE_NAME NOT LIKE 'uzytkownicy' ".$sortQuery[$_POST['sort']].";";
+                } else {
+                    $showQuery = "SELECT table_name, engine FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND TABLE_NAME NOT LIKE 'uzytkownicy';";
+                }
                 $tablesQuery = mysqli_query($polaczenie, $showQuery);
                 if (mysqli_num_rows($tablesQuery) == 0) {
                     echo "<p style='text-align: center'>Brak albumów w bazie.</p>";

@@ -75,9 +75,9 @@ if (!isset($_GET['admin'])) {
                 <?php
                 $backLink = str_replace(' ', '%20', $_SESSION['album']);
                 if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
-                    echo "<a onclick=fadeOut('./album.php?nazwa=" . $backLink . "&admin=yes')>Powrót do albumu: " . $_SESSION['album'] . "</a>";
+                    echo "<a onclick=fadeOut('./album.php?album=" . $backLink . "&admin=yes')>Powrót do albumu: " . $_SESSION['album'] . "</a>";
                 } else {
-                    echo "<a onclick=fadeOut('./album.php?nazwa=" . $backLink . "')>Powrót do albumu: " . $_SESSION['album'] . "</a>";
+                    echo "<a onclick=fadeOut('./album.php?album=" . $backLink . "')>Powrót do albumu: " . $_SESSION['album'] . "</a>";
                 }
                 ?>
             </div>
@@ -151,13 +151,13 @@ if (!isset($_GET['admin'])) {
                         $deleteQuery = "SELECT awers, rewers FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                         $deleteQ = mysqli_query($polaczenie, $deleteQuery);
                         $row = mysqli_fetch_row($deleteQ);
-                        $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
+                        $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "', time = NOW() WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
                         $query3 = mysqli_query($polaczenie, $updateQuery);
                         $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
                         if ($_FILES['awers']['name'] != "") {
                             $oldAwers = "images/" . strval($_SESSION['album']) . "/" . $row[0];
                             unlink($oldAwers);
-                            $updateAwers = "UPDATE `" . $_SESSION['album'] . "` SET awers='" . $_FILES['awers']['name'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
+                            $updateAwers = "UPDATE `" . $_SESSION['album'] . "` SET awers='" . $_FILES['awers']['name'] . "', time = NOW() WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
                             $target_awers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['awers']['name']);
                             $fileType_awers = pathinfo($target_awers, PATHINFO_EXTENSION);
                             if (in_array($fileType_awers, $allowed)) {
@@ -168,7 +168,7 @@ if (!isset($_GET['admin'])) {
                         if ($_FILES['rewers']['name'] != "") {
                             $oldRewers = "images/" . strval($_SESSION['album']) . "/" . $row[1];
                             unlink($oldRewers);
-                            $updateRewers = "UPDATE `" . $_SESSION['album'] . "` SET rewers='" . $_FILES['rewers']['name'] . "' WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
+                            $updateRewers = "UPDATE `" . $_SESSION['album'] . "` SET rewers='" . $_FILES['rewers']['name'] . "', time = NOW() WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
                             $target_rewers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['rewers']['name']);
                             $fileType_rewers = pathinfo($target_rewers, PATHINFO_EXTENSION);
                             if (in_array($fileType_rewers, $allowed)) {

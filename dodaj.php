@@ -95,7 +95,7 @@ if (!$_SESSION['zalogowany']) {
                 if (!isset($_POST['nazwa']) or !isset($_POST['opis'])) {
                     return;
                 }
-                $insertQuery = "INSERT INTO `" . strval($_POST['album']) . "` (`id`, `nazwa`, `opis`, `awers`, `rewers`) VALUES (NULL, '" . strval($_POST['nazwa']) . "', '" . strval($_POST['opis']) . "', '" . $_FILES['awers']['name'] . "', '" . $_FILES['rewers']['name'] . "');";
+                $insertQuery = "INSERT INTO `" . strval($_POST['album']) . "` (`id`, `nazwa`, `opis`, `awers`, `rewers`, `time`) VALUES (NULL, '" . strval($_POST['nazwa']) . "', '" . strval($_POST['opis']) . "', '" . $_FILES['awers']['name'] . "', '" . $_FILES['rewers']['name'] . "', NOW());";
                 $target_awers = "images/" . strval($_POST['album']) . "/" . basename($_FILES['awers']['name']);
                 $target_rewers = "images/" . strval($_POST['album']) . "/" . basename($_FILES['rewers']['name']);
                 $fileType_awers = pathinfo($target_awers, PATHINFO_EXTENSION);

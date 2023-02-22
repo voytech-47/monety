@@ -76,6 +76,7 @@ if (!$_SESSION['zalogowany']) {
                         `opis` TEXT NOT NULL,
                         `awers` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
                         `rewers` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                        `time` DATETIME NOT NULL,
                         PRIMARY KEY (`id`)
                       ) ENGINE = InnoDB;";
 
