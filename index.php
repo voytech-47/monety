@@ -61,7 +61,13 @@ $_SESSION['zalogowany'] = false;
                         EOL;
 
                     if (isset($_POST['haslo']) and isset($_POST['login'])) {
-                        $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+                        $polaczenie = mysqli_connect('localhost', 'root', '');
+                        try {
+                            mysqli_select_db($polaczenie, 'monety');
+                        } catch (Exception $e) {
+                            mysqli_query($polaczenie, "CREATE DATABASE `monety`;");
+                            mysqli_query($polaczenie, "USE `monety`;");
+                        }
                         $loginKW = 'SELECT login, haslo FROM uzytkownicy WHERE login = "' . $_POST['login'] . '";';
                         try {
                             $row = mysqli_fetch_row(mysqli_query($polaczenie, $loginKW));
