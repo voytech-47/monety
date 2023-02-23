@@ -1,7 +1,7 @@
 <?php
-    session_start();
-    session_unset();
-    $_SESSION['zalogowany'] = False;
+session_start();
+session_unset();
+$_SESSION['zalogowany'] = false;
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -22,8 +22,8 @@
                     <a onclick=fadeOut("./home.php")>Albumy</a>
                 </li>
                 <?php
-                    if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
-                        echo <<< EOL
+                if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+                    echo <<<EOL
                         <li>
                             <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
                         </li>
@@ -31,7 +31,7 @@
                             <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
                         </li>
                         EOL;
-                    }
+                }
                 ?>
                 <li>
                     <a onclick=fadeOut("./index.php")>Zaloguj się</a>
@@ -59,10 +59,10 @@
                         </span>
                         <input type="submit" value="Zaloguj się">
                         EOL;
-                    
+
                     if (isset($_POST['haslo']) and isset($_POST['login'])) {
                         $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-                        $loginKW = 'SELECT login, haslo FROM uzytkownicy WHERE login = "'.$_POST['login'].'";';
+                        $loginKW = 'SELECT login, haslo FROM uzytkownicy WHERE login = "' . $_POST['login'] . '";';
                         try {
                             $row = mysqli_fetch_row(mysqli_query($polaczenie, $loginKW));
                         } catch (Exception $e) {
@@ -83,6 +83,14 @@
             </div>
         </div>
     </div>
+    <footer>
+        <a href='https://github.com/voytech-47'>autor: Wojciech Grzybowski</a>
+        <?php
+        if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+            echo "<p>Zalogowany użytykownik: " . $_SESSION['login'] . "</p>";
+        }
+        ?>
+    </footer>
 </body>
 
 </html>

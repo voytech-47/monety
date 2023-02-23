@@ -113,6 +113,14 @@ if (!$_SESSION['zalogowany']) {
             </div>
         </div>
     </div>
+    <footer>
+        <a href='https://github.com/voytech-47'>autor: Wojciech Grzybowski</a>
+        <?php
+        if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+            echo "<p>Zalogowany użytykownik: " . $_SESSION['login'] . "</p>";
+        }
+        ?>
+    </footer>
 </body>
 
 </html>

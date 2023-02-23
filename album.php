@@ -97,7 +97,7 @@ if (!isset($_GET['admin'])) {
                 <input type="file" id="zdjecie" name="zdjecie" accept=".jpg,.jpeg,.png,.jfif">
                 </span>
                 EOL;
-                echo "<input type='submit' style='background-color:#a0ffa0;' value='Zaakceptuj zmiany'>";
+                echo "<input type='submit' style='background-color:#a0ffa0; cursor: pointer' value='Zaakceptuj zmiany'>";
                 echo "<button type='button' id='delete' formmethod='post' form='form' style='background-color: #ff7373; margin-top: 1rem; width: 100%; cursor:pointer' onclick='usun(false)'>Usuń album</button>";
                 echo "</form></div>";
             } else {
@@ -120,9 +120,9 @@ if (!isset($_GET['admin'])) {
                     "updateDesc" => "Najnowsza edycja",
                     "updateAsc" => "Najstarsza edycja"
                 );
-                $link = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                 echo "<p id='link' onclick=copyToClipboard()>Kliknij, aby skopiować adres albumu</p>";
-                echo "<p style='display: none' id='toCopy'>".$link."</p>";
+                echo "<p style='display: none' id='toCopy'>" . $link . "</p>";
                 if ((isset($_GET['admin']) and $_GET['admin'] == "yes") or (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes")) {
                     echo "<a class='back' onclick=fadeOut('./home.php?admin=yes')>Powrót do panelu administratora</a>";
                     echo "</span>";
@@ -170,7 +170,7 @@ if (!isset($_GET['admin'])) {
                         "updateAsc" => "ORDER BY `time` ASC"
                     );
                     if (isset($_POST['sort'])) {
-                        $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "` ".$sortQuery[$_POST['sort']].";";
+                        $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "` " . $sortQuery[$_POST['sort']] . ";";
                     } else {
                         $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "`;";
                     }
@@ -219,6 +219,14 @@ if (!isset($_GET['admin'])) {
                 ?>
         </div>
     </div>
+    <footer>
+        <a href='https://github.com/voytech-47'>autor: Wojciech Grzybowski</a>
+        <?php
+        if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+            echo "<p>Zalogowany użytykownik: " . $_SESSION['login'] . "</p>";
+        }
+        ?>
+    </footer>
     <script src="./script/main.js"></script>
 </body>
 
