@@ -189,3 +189,12 @@ input[type="range"] {
     flex-direction: row;
     flex-wrap: nowrap;
 }
+
+.panel-main {
+    width: revert;
+    height: revert;
+}
+
+img {
+    max-height: 12rem;
+}

@@ -34,3 +34,8 @@ function usun(mode) {
         }
     }
 }
+
+function copyToClipboard() {
+    console.log(document.getElementById('toCopy').innerHTML)
+    navigator.clipboard.writeText(document.getElementById('toCopy').innerHTML)
+}

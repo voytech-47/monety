@@ -121,9 +121,15 @@ session_start();
                                 </div>";
                         echo "<div class='panel-main'>";
                         if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                            echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            if (file_exists("images/".$tables[0]."/face.tmp"))
+                                echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            else
+                                echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
                         } else {
-                            echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            if (file_exists("images/".$tables[0]."/face.tmp"))
+                                echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                            else
+                            echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
                         }
                         echo "</div></div>";
                     }

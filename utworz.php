@@ -58,7 +58,7 @@ if (!$_SESSION['zalogowany']) {
                     </span>
                     <span class="input">
                         <label for="zdjecie">Zdjęcie albumu: </label>
-                        <input required type="file" id="zdjecie" name="zdjecie" accept=".jpg,.jpeg,.png,.jfif">
+                        <input type="file" id="zdjecie" name="zdjecie" accept=".jpg,.jpeg,.png,.jfif">
                     </span>
                     <input type="submit" value="Dodaj album">
                 </form>
@@ -89,8 +89,10 @@ if (!$_SESSION['zalogowany']) {
                     if (!file_exists("images/" . strval($_POST['nazwa']))) {
                         mkdir("images/" . strval($_POST['nazwa']), 0777, true);
                     }
-                    $target_face = "images/" . strval($_POST['nazwa']) . "/face." . pathinfo($_FILES['zdjecie']['tmp_name'], PATHINFO_EXTENSION);
-                    move_uploaded_file($_FILES['zdjecie']['tmp_name'], $target_face);
+                    if ($_FILES['zdjecie']['name'] != "") {
+                        $target_face = "images/" . strval($_POST['nazwa']) . "/face." . pathinfo($_FILES['zdjecie']['tmp_name'], PATHINFO_EXTENSION);
+                        move_uploaded_file($_FILES['zdjecie']['tmp_name'], $target_face);
+                    }
                     echo "<p style='margin-top: 2rem;'>Dodano album o nazwie <i>" . strval($_POST['nazwa']) . "</i>.</p>";
                     $flag = 0;
                 }

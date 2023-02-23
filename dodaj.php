@@ -66,7 +66,7 @@ if (!$_SESSION['zalogowany']) {
                     </span>
                     <span class="input input-textarea">
                         <label for="opis" id="opis-label">Opis:</label>
-                        <textarea required name="opis" id="opis"></textarea>
+                        <textarea name="opis" id="opis"></textarea>
                     </span>
                     <span class="input">
                         <label for="album">Wybierz album:</label>
