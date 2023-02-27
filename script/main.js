@@ -46,5 +46,6 @@ function startAnimation() {
     box.style.cssText += "animation: popUp linear 1.5s;"
     setTimeout(() => {
         box.style.animation = "";
+        box.style.zIndex = 1;
     }, 1501);
 }
