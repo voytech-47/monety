@@ -121,6 +121,7 @@ if (!isset($_GET['admin'])) {
                     "updateAsc" => "Najstarsza edycja"
                 );
                 $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                echo "<div id='popup'>Skopiowano</div>";
                 echo "<p id='link' onclick=copyToClipboard()>Kliknij, aby skopiować adres albumu</p>";
                 echo "<p style='display: none' id='toCopy'>" . $link . "</p>";
                 if ((isset($_GET['admin']) and $_GET['admin'] == "yes") or (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes")) {

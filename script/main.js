@@ -38,4 +38,13 @@ function usun(mode) {
 function copyToClipboard() {
     console.log(document.getElementById('toCopy').innerHTML)
     navigator.clipboard.writeText(document.getElementById('toCopy').innerHTML)
+    startAnimation()
+}
+
+function startAnimation() {
+    const box = document.getElementById("popup")
+    box.style.cssText += "animation: popUp linear 1.5s;"
+    setTimeout(() => {
+        box.style.animation = "";
+    }, 1501);
 }
