@@ -59,15 +59,16 @@ $_SESSION['zalogowany'] = false;
                         </span>
                         <input type="submit" value="Zaloguj się">
                         EOL;
-
+			  $polaczenie = mysqli_connect('localhost', 'root', '');
+                    try {
+                        mysqli_select_db($polaczenie, 'monety');
+                    } catch (Exception $e) {
+			      mysqli_query($polaczenie, "CREATE DATABASE `monety`;");
+                        mysqli_query($polaczenie, "USE `monety`;");
+                        mysqli_query($polaczenie, "CREATE TABLE `monety`.`uzytkownicy` (`id` INT NOT NULL AUTO_INCREMENT , `login` TEXT NOT NULL , `haslo` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+                        mysqli_query($polaczenie, "INSERT INTO `uzytkownicy` VALUES ('', 'admin', 'c380f833034d60bf035a134094eb538d600dc6f9');");                    
+                    }
                     if (isset($_POST['haslo']) and isset($_POST['login'])) {
-                        $polaczenie = mysqli_connect('localhost', 'root', '');
-                        try {
-                            mysqli_select_db($polaczenie, 'monety');
-                        } catch (Exception $e) {
-                            mysqli_query($polaczenie, "CREATE DATABASE `monety`;");
-                            mysqli_query($polaczenie, "USE `monety`;");
-                        }
                         $loginKW = 'SELECT login, haslo FROM uzytkownicy WHERE login = "' . $_POST['login'] . '";';
                         try {
                             $row = mysqli_fetch_row(mysqli_query($polaczenie, $loginKW));

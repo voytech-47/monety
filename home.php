@@ -95,8 +95,8 @@ session_start();
                 } catch (Exception $e) {
                     mysqli_query($polaczenie, "CREATE DATABASE `monety`;");
                     mysqli_query($polaczenie, "USE `monety`;");
-                    mysqli_query("CREATE TABLE `monety`.`uzytkownicy` (`id` INT NOT NULL AUTO_INCREMENT , `login` TEXT NOT NULL , `haslo` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
-                    mysqli_query("INSERT INTO `uzytkownicy` VALUES ('admin', 'c380f833034d60bf035a134094eb538d600dc6f9`);");
+                    mysqli_query($polaczenie, "CREATE TABLE `monety`.`uzytkownicy` (`id` INT NOT NULL AUTO_INCREMENT , `login` TEXT NOT NULL , `haslo` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+                    mysqli_query($polaczenie, "INSERT INTO `uzytkownicy` VALUES ('', 'admin', 'c380f833034d60bf035a134094eb538d600dc6f9');");
                 }
                 $sortQuery = array(
                     "alphaAsc" => "ORDER BY TABLE_NAME ASC",
