@@ -41,7 +41,8 @@ if (!isset($_GET['admin'])) {
     if (isset($_POST['album'])) {
         // $oldFace = "images/" . strval($_SESSION['album']) . "/face.tmp";
         // unlink($oldFace);
-        $target_face = "images/" . strval($_SESSION['album']) . "/face." . pathinfo($_FILES['zdjecie']['tmp_name'], PATHINFO_EXTENSION);
+        $dropTable = str_replace('%20', ' ', $_SESSION['album']);
+        $target_face = "images/" . strval($dropTable) . "/face." . pathinfo($_FILES['zdjecie']['tmp_name'], PATHINFO_EXTENSION);
         move_uploaded_file($_FILES['zdjecie']['tmp_name'], $target_face);
     }
     ?>
@@ -110,114 +111,136 @@ if (!isset($_GET['admin'])) {
             ?>
         </div>
         <div id="main">
-            <span id='back-span'>
-                <?php
-                $sortDict = array(
-                    "alphaAsc" => "Alfabetycznie",
-                    "alphaDesc" => "Od Z do A",
-                    "dateDesc" => "Od najnowszych",
-                    "dateAsc" => "Od najstarszych",
-                    "updateDesc" => "Najnowsza edycja",
-                    "updateAsc" => "Najstarsza edycja"
-                );
-                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                echo "<div id='popup'>Skopiowano</div>";
-                echo "<p id='link' onclick=copyToClipboard()>Kliknij, aby skopiować adres albumu</p>";
-                echo "<p style='display: none' id='toCopy'>" . $link . "</p>";
-                if ((isset($_GET['admin']) and $_GET['admin'] == "yes") or (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes")) {
-                    echo "<a class='back' onclick=fadeOut('./home.php?admin=yes')>Powrót do panelu administratora</a>";
-                    echo "</span>";
-                    echo "<p style='text-align: center; margin-bottom: 0.5rem; margin-top: 1rem'>Wybierz monetę, aby edytować</p>";
-                } else {
-                    echo "<a class='back' onclick=fadeOut('./home.php')>Powrót do albumów</a>";
-                    echo <<<EOL
+            <div id="left">
+                <p>Albumy:</p>
+                <ul>
+                    <?php
+                    $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+                    $newAlbum = str_replace(' ', '%20', $_GET['album']);
+                    $albumyQuery = "SELECT table_name, engine FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND (TABLE_NAME NOT LIKE 'uzytkownicy' AND TABLE_NAME NOT LIKE '" . $newAlbum . "') ORDER BY TABLE_NAME;";
+                    $query0 = mysqli_query($polaczenie, $albumyQuery);
+                    while ($row = mysqli_fetch_row($query0)) {
+                        $newRow = str_replace(' ', '%20', $row[0]);
+                        echo "<li><a onclick=fadeOut('./album.php?album=" . $newRow . "')>" . $row[0] . "</a></li>";
+                    }
+                    ?>
+                </ul>
+            </div>
+            <div id='right'>
+                <span id='back-span'>
+                    <?php
+                    $sortDict = array(
+                        "alphaAsc" => "Alfabetycznie",
+                        "alphaDesc" => "Od Z do A",
+                        "dateDesc" => "Od najnowszych",
+                        "dateAsc" => "Od najstarszych",
+                        "updateDesc" => "Najnowsza edycja",
+                        "updateAsc" => "Najstarsza edycja"
+                    );
+                    $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                    echo "<div id='popup'>Skopiowano</div>";
+                    echo "<p id='link' onclick=copyToClipboard()>Kliknij, aby skopiować adres albumu</p>";
+                    echo "<p style='display: none' id='toCopy'>" . $link . "</p>";
+                    if ((isset($_GET['admin']) and $_GET['admin'] == "yes") or (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes")) {
+                        echo "<a class='back' onclick=fadeOut('./home.php?admin=yes')>Powrót do panelu administratora</a>";
+                        echo "</span>";
+                        echo "<p style='text-align: center; margin-bottom: 0.5rem; margin-top: 1rem'>Wybierz monetę, aby edytować</p>";
+                    } else {
+                        echo "<a class='back' onclick=fadeOut('./home.php')>Powrót do albumów</a>";
+                        echo <<<EOL
                     <form method='post'>
                     <select name='sort' id='sort' onchange='this.form.submit()' style='margin-top: 1rem'>
                     EOL;
-                    if (!isset($_POST['sort'])) {
-                        echo "<option selected disabled value='def'>Sortuj...</option>";
-                        foreach ($sortDict as $key => $value) {
-                            echo "<option value='" . $key . "'>" . $value . "</option>";
-                        }
-                    } else {
-                        echo "<option disabled value='def'>Sortuj...</option>";
-                        foreach ($sortDict as $key => $value) {
-                            if ($_POST['sort'] == $key) {
-                                echo "<option selected value='" . $key . "'>" . $value . "</option>";
-                            } else {
+                        if (!isset($_POST['sort'])) {
+                            echo "<option selected disabled value='def'>Sortuj...</option>";
+                            foreach ($sortDict as $key => $value) {
                                 echo "<option value='" . $key . "'>" . $value . "</option>";
                             }
+                        } else {
+                            echo "<option disabled value='def'>Sortuj...</option>";
+                            foreach ($sortDict as $key => $value) {
+                                if ($_POST['sort'] == $key) {
+                                    echo "<option selected value='" . $key . "'>" . $value . "</option>";
+                                } else {
+                                    echo "<option value='" . $key . "'>" . $value . "</option>";
+                                }
+                            }
                         }
-                    }
-                    echo <<<EOL
+                        echo <<<EOL
                     </select>
                     </form>
                     EOL;
-                    echo "</span>";
-                }
-                ?>
-                <div id="panels">
-                    <?php
-                    // if (!isset($_GET['nazwa'])) {
-                    //     header("Location: home.php");
-                    // }
-                    $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-                    $sortQuery = array(
-                        "alphaAsc" => "ORDER BY `nazwa` ASC",
-                        "alphaDesc" => "ORDER BY `nazwa` DESC",
-                        "dateDesc" => "ORDER BY `id` DESC",
-                        "dateAsc" => "ORDER BY `id` ASC",
-                        "updateDesc" => "ORDER BY `time` DESC",
-                        "updateAsc" => "ORDER BY `time` ASC"
-                    );
-                    if (isset($_POST['sort'])) {
-                        $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "` " . $sortQuery[$_POST['sort']] . ";";
-                    } else {
-                        $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "`;";
-                    }
-                    $query = mysqli_query($polaczenie, $showQuery);
-                    if (mysqli_num_rows($query) == 0) {
-                        echo "<p style='text-align: center; margin-bottom: 1rem'>Brak monet w albumie.</p>";
-                    } else {
-                        while ($row = mysqli_fetch_row($query)) {
-                            echo "<div class='panel'>";
-                            echo "<div class='panel-title'>";
-                            echo "<h1>" . $row[0] . "</h1>";
-                            echo "</div>";
-                            echo "<div class='panel-main'>";
-                            $row[0] = str_replace(' ', '%20', $row[0]);
-                            $_SESSION['album'] = str_replace(' ', '%20', $_SESSION['album']);
-                            if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                                echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '&admin=yes")>';
-                            } else {
-                                echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '")>';
-                            }
-                            echo "<img class='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
-                          <img class='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
-                          </a>";
-                            // echo "<p class='opis'>" . $row[1] . "</p>";
-                            echo "</div>";
-                            echo "</div>";
-                        }
-                    }
-                    if (isset($_POST['album'])) {
-                        $regex = '/^(?!.*\b' . $_POST['album'] . '\b).*$/u';
-                        if (preg_match($regex, $_SESSION['album'])) {
-                            $updateQuery = "RENAME TABLE `" . $_SESSION['album'] . "` TO `" . $_POST['album'] . "`;";
-                            $query2 = mysqli_query($polaczenie, $updateQuery);
-                            $old = "./images/" . $_SESSION['album'];
-                            $new = "./images/" . $_POST['album'];
-                            rename($old, $new);
-                        }
-                        mysqli_close($polaczenie);
+                        echo "</span>";
                     }
                     ?>
-                </div>
-                <?php
-                if (isset($_POST['album'])) {
-                    header("Location: home.php?admin=yes&changed=yes");
-                }
-                ?>
+                    <div id="panels">
+                        <?php
+                        // if (!isset($_GET['nazwa'])) {
+                        //     header("Location: home.php");
+                        // }
+                        $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+                        $sortQuery = array(
+                            "alphaAsc" => "ORDER BY `nazwa` ASC",
+                            "alphaDesc" => "ORDER BY `nazwa` DESC",
+                            "dateDesc" => "ORDER BY `id` DESC",
+                            "dateAsc" => "ORDER BY `id` ASC",
+                            "updateDesc" => "ORDER BY `time` DESC",
+                            "updateAsc" => "ORDER BY `time` ASC"
+                        );
+                        $album = str_replace('%20', ' ', $_SESSION['album']);
+                        if (isset($_POST['sort'])) {
+                            $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $album . "` " . $sortQuery[$_POST['sort']] . ";";
+                        } else {
+                            $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $album . "`;";
+                        }
+                        $query = mysqli_query($polaczenie, $showQuery);
+                        if (mysqli_num_rows($query) == 0) {
+                            echo "<p style='text-align: center; margin-bottom: 1rem'>Brak monet w albumie.</p>";
+                        } else {
+                            while ($row = mysqli_fetch_row($query)) {
+                                echo "<div class='panel'>";
+                                echo "<div class='panel-title'>";
+                                echo "<h1>" . $row[0] . "</h1>";
+                                echo "</div>";
+                                echo "<div class='panel-main'>";
+                                $row[0] = str_replace(' ', '%20', $row[0]);
+                                $_SESSION['album'] = str_replace(' ', '%20', $_SESSION['album']);
+                                if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                                    echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '&admin=yes")>';
+                                } else {
+                                    echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '")>';
+                                }
+                                echo "<img class='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
+                          <img class='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
+                          </a>";
+                                // echo "<p class='opis'>" . $row[1] . "</p>";
+                                echo "</div>";
+                                echo "</div>";
+                            }
+                        }
+                        if (isset($_POST['album'])) {
+                            $regex = '/^(?!.*\b' . $_POST['album'] . '\b).*$/u';
+                            if (preg_match($regex, $_SESSION['album'])) {
+                                $updateQuery = "RENAME TABLE `" . $_SESSION['album'] . "` TO `" . $_POST['album'] . "`;";
+                                try {
+                                    $query2 = mysqli_query($polaczenie, $updateQuery);
+                                } catch (Exception $e) {
+                                    
+                                }
+                                $old = "./images/" . $_SESSION['album'];
+                                $new = "./images/" . $_POST['album'];
+                                rename($old, $new);
+                            }
+                            mysqli_close($polaczenie);
+                        }
+                        ?>
+                    </div>
+                    <?php
+                    if (isset($_POST['album'])) {
+                        header("Location: home.php?admin=yes&changed=yes");
+                    }
+                    ?>
+            </div>
         </div>
     </div>
     <footer>

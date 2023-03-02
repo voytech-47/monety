@@ -4,6 +4,7 @@
 
 #banner>h1 {
     padding-bottom: 1rem;
+    border-bottom: 3px solid black;
 }
 
 
@@ -52,7 +53,7 @@
 #img-wrap:hover .img-bot {
     opacity: 1 !important;
 }
-
+/* 
 #main {
     display: flex;
     align-items: stretch;
@@ -64,7 +65,7 @@
     margin-right: 7%;
     margin-left: 7%;
     margin-bottom: 10%;
-}
+} */
 
 @media only screen and (max-width: 770px) {
     #main {

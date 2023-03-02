@@ -47,12 +47,12 @@ html {
 
 #wrapper {
     display: flex;
-    align-items: stretch;
     justify-content: flex-start;
     flex-direction: column;
     background-color: #edeff1;
     height: 100%;
     width: 100%;
+    align-items: center;
 }
 
 #banner {
@@ -63,7 +63,7 @@ html {
     margin-bottom: 0.7rem;
     height: 9%;
     background-color: #babcbe;
-
+    width: 100%;
 }
 
 #main {
@@ -77,6 +77,8 @@ html {
     margin-right: 10%;
     margin-left: 10%;
     margin-bottom: 10%;
+    width: 100%;
+    position: relative
 }
 
 .panel {
@@ -153,10 +155,34 @@ a {
     flex-wrap: wrap;
 }
 
+#left {
+    position: absolute;
+    padding-left: 2rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 3px solid black;
+    border-right: 3px solid black;
+    left: 0;
+    top: -0.7rem;
+    background-color: #D4D6D8;
+    border-radius: 0 0 10px 0;
+    max-width: 12rem;
+}
+
+#left ul li {
+    display: table;
+}
+
+#left ul li:before{
+    content: "";
+    display: list-item;
+    position: absolute;
+}
+
 @media only screen and (max-width: 810px) {
     #main {
         display: flex;
-        align-items: stretch;
+        align-items: center;
         flex-direction: column;
         flex-wrap: nowrap;
         align-content: stretch;
@@ -182,6 +208,10 @@ a {
     #options>li:not(:last-child) {
         margin-bottom: 0.3rem;
         margin-right: 0;
+    }
+
+    #left {
+        display: none;
     }
 }
 
@@ -233,12 +263,12 @@ footer {
     align-items: center;
 }
 
-footer > p,
-footer > a {
-    font-weight: revert;    
+footer>p,
+footer>a {
+    font-weight: revert;
 }
 
-footer > a {
+footer>a {
     color: beige;
     text-decoration: none;
     cursor: pointer;

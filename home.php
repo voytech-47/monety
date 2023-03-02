@@ -47,7 +47,7 @@ session_start();
         </div>
         <div id="main">
             <?php
-            if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+            if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                 echo "<p style='text-align: center'>Wybierz, aby edytować album:</p>";
             } else {
                 $_SESSION['admin'] = "no";
@@ -122,7 +122,7 @@ session_start();
                     <h1>" . $tables[0] . "</h1>
                                 </div>";
                         echo "<div class='panel-main'>";
-                        if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                        if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                             if (file_exists("images/".$tables[0]."/face.tmp"))
                                 echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                             else
