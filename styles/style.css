@@ -164,7 +164,7 @@ a {
     top: -0.81rem;
     background-color: #D4D6D8;
     border-radius: 0 0 10px 0;
-    max-width: 12rem;
+    max-width: 13rem;
 }
 
 #left ul li {
@@ -208,6 +208,12 @@ a {
         margin-right: 0;
     }
 
+    #left {
+        display: none;
+    }
+}
+
+@media only screen and (max-height:574px) {
     #left {
         display: none;
     }

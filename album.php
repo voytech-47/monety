@@ -112,16 +112,25 @@ if (!isset($_GET['admin'])) {
         </div>
         <div id="main">
             <div id="left">
-                <p>Albumy:</p>
+                <p>Najnowsze albumy:</p>
                 <ul>
                     <?php
                     $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
                     $newAlbum = str_replace('%20', ' ', $_GET['album']);
-                    $albumyQuery = "SELECT table_name, engine FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND (TABLE_NAME NOT LIKE 'uzytkownicy' AND TABLE_NAME NOT LIKE '" . $newAlbum . "') ORDER BY TABLE_NAME;";
+                    $albumyQuery = "SELECT table_name, engine, (SELECT COUNT(table_name) FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND (TABLE_NAME NOT LIKE 'uzytkownicy' AND TABLE_NAME NOT LIKE '" . $newAlbum . "')) AS rem FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND (TABLE_NAME NOT LIKE 'uzytkownicy' AND TABLE_NAME NOT LIKE '" . $newAlbum . "') ORDER BY CREATE_TIME DESC LIMIT 10;";
                     $query0 = mysqli_query($polaczenie, $albumyQuery);
+                    $mark = False;
+                    $count;
                     while ($row = mysqli_fetch_row($query0)) {
+                        if ($row[2] > 10 and !$mark) {
+                            $mark = True;
+                            $count = $row[2] - 10;
+                        }
                         $newRow = str_replace(' ', '%20', $row[0]);
                         echo "<li><a onclick=fadeOut('./album.php?album=" . $newRow . "')>" . $row[0] . "</a></li>";
+                    }
+                    if ($mark) {
+                        echo "<p>i jeszcze " . $count . " albumów</p>";
                     }
                     ?>
                 </ul>
@@ -225,7 +234,7 @@ if (!isset($_GET['admin'])) {
                                 try {
                                     $query2 = mysqli_query($polaczenie, $updateQuery);
                                 } catch (Exception $e) {
-                                    
+
                                 }
                                 $old = "./images/" . $_SESSION['album'];
                                 $new = "./images/" . $_POST['album'];

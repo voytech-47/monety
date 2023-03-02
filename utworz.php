@@ -54,7 +54,7 @@ if (!$_SESSION['zalogowany']) {
                     <h2>Wprowadź informacje dotyczące nowego albumu:</h2>
                     <span class="input">
                         <label for="nazwa" id="nazwa-label">Nazwa: </label>
-                        <input required type="text" name="nazwa" id="nazwa">
+                        <input required type="text" name="nazwa" id="nazwa" pattern='^(?=\S)(?!.*[<>])(.*\S)?$'>
                     </span>
                     <span class="input">
                         <label for="zdjecie">Zdjęcie albumu: </label>
