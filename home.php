@@ -14,7 +14,7 @@ session_start();
 <body>
     <script src="./script/main.js"></script>
     <div id="wrapper">
-        <div id="banner">
+        <div id="banner" style='border-bottom: 3px solid black'>
             <ul id="options">
                 <li>
                     <a onclick=fadeOut("./home.php")>Albumy</a>

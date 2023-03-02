@@ -116,7 +116,7 @@ if (!isset($_GET['admin'])) {
                 <ul>
                     <?php
                     $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-                    $newAlbum = str_replace(' ', '%20', $_GET['album']);
+                    $newAlbum = str_replace('%20', ' ', $_GET['album']);
                     $albumyQuery = "SELECT table_name, engine FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND (TABLE_NAME NOT LIKE 'uzytkownicy' AND TABLE_NAME NOT LIKE '" . $newAlbum . "') ORDER BY TABLE_NAME;";
                     $query0 = mysqli_query($polaczenie, $albumyQuery);
                     while ($row = mysqli_fetch_row($query0)) {
