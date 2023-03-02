@@ -49,43 +49,41 @@ session_start();
             <?php
             if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                 echo "<p style='text-align: center'>Wybierz, aby edytować album:</p>";
-            } else {
-                $_SESSION['admin'] = "no";
-                $sortDict = array(
-                    "alphaAsc" => "Alfabetycznie",
-                    "alphaDesc" => "Od Z do A",
-                    "dateDesc" => "Od najnowszych",
-                    "dateAsc" => "Od najstarszych",
-                    "updateDesc" => "Najnowsza edycja",
-                    "updateAsc" => "Najstarsza edycja"
-                );
-                echo "<span id='back-span'>";
-                echo "<p style='text-align: center'>Dostępne albumy:</p>";
-                echo <<<EOL
+            }
+            $sortDict = array(
+                "alphaAsc" => "Alfabetycznie",
+                "alphaDesc" => "Od Z do A",
+                "dateDesc" => "Od najnowszych",
+                "dateAsc" => "Od najstarszych",
+                "updateDesc" => "Najnowsza edycja",
+                "updateAsc" => "Najstarsza edycja"
+            );
+            echo "<span id='back-span'>";
+            echo "<p style='text-align: center'>Dostępne albumy:</p>";
+            echo <<<EOL
                 <form method='post'>
                 <select name='sort' id='sort' onchange='this.form.submit()' style='margin-top: 1rem'>
                 EOL;
-                if (!isset($_POST['sort'])) {
-                    echo "<option selected disabled value='def'>Sortuj...</option>";
-                    foreach ($sortDict as $key => $value) {
+            if (!isset($_POST['sort'])) {
+                echo "<option selected disabled value='def'>Sortuj...</option>";
+                foreach ($sortDict as $key => $value) {
+                    echo "<option value='" . $key . "'>" . $value . "</option>";
+                }
+            } else {
+                echo "<option disabled value='def'>Sortuj...</option>";
+                foreach ($sortDict as $key => $value) {
+                    if ($_POST['sort'] == $key) {
+                        echo "<option selected value='" . $key . "'>" . $value . "</option>";
+                    } else {
                         echo "<option value='" . $key . "'>" . $value . "</option>";
                     }
-                } else {
-                    echo "<option disabled value='def'>Sortuj...</option>";
-                    foreach ($sortDict as $key => $value) {
-                        if ($_POST['sort'] == $key) {
-                            echo "<option selected value='" . $key . "'>" . $value . "</option>";
-                        } else {
-                            echo "<option value='" . $key . "'>" . $value . "</option>";
-                        }
-                    }
                 }
-                echo <<<EOL
+            }
+            echo <<<EOL
                 </select>
                 </form>
                 </span>
                 EOL;
-            }
             ?>
             <div id="panels">
                 <?php
@@ -103,11 +101,11 @@ session_start();
                     "alphaDesc" => "ORDER BY TABLE_NAME DESC",
                     "dateDesc" => "ORDER BY CREATE_TIME DESC",
                     "dateAsc" => "ORDER BY CREATE_TIME ASC",
-                    "updateDesc" => "ORDER BY CREATE_TIME DESC",
-                    "updateAsc" => "ORDER BY CREATE_TIME ASC"
+                    "updateDesc" => "ORDER BY UPDATE_TIME DESC",
+                    "updateAsc" => "ORDER BY UPDATE_TIME ASC"
                 );
                 if (isset($_POST['sort'])) {
-                    $showQuery = "SELECT table_name, engine FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND TABLE_NAME NOT LIKE 'uzytkownicy' ".$sortQuery[$_POST['sort']].";";
+                    $showQuery = "SELECT table_name, engine FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND TABLE_NAME NOT LIKE 'uzytkownicy' " . $sortQuery[$_POST['sort']] . ";";
                 } else {
                     $showQuery = "SELECT table_name, engine FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='monety' AND TABLE_NAME NOT LIKE 'uzytkownicy';";
                 }
@@ -123,15 +121,15 @@ session_start();
                                 </div>";
                         echo "<div class='panel-main'>";
                         if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                            if (file_exists("images/".$tables[0]."/face.tmp"))
+                            if (file_exists("images/" . $tables[0] . "/face.tmp"))
                                 echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                             else
                                 echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
                         } else {
-                            if (file_exists("images/".$tables[0]."/face.tmp"))
+                            if (file_exists("images/" . $tables[0] . "/face.tmp"))
                                 echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
                             else
-                            echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
+                                echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
                         }
                         echo "</div></div>";
                     }
@@ -149,9 +147,9 @@ session_start();
     <footer>
         <a href='https://github.com/voytech-47'>autor: Wojciech Grzybowski</a>
         <?php
-            if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
-                echo "<p>Zalogowany użytykownik: ".$_SESSION['login']."</p>";
-            }
+        if (isset($_SESSION['zalogowany']) and $_SESSION['zalogowany']) {
+            echo "<p>Zalogowany użytykownik: " . $_SESSION['login'] . "</p>";
+        }
         ?>
     </footer>
 </body>
