@@ -81,6 +81,12 @@
     }
 }
 
+@media only screen and (max-height:728px) {
+    #left {
+        display: none;
+    }
+}
+
 #banner>h1 {
     width: 100%;
     background: #D4D6D8;
@@ -105,6 +111,7 @@
     width: 100%;
     justify-content: center;
     align-items: baseline;
+    border-bottom: 3px solid black;
 }
 
 #banner-input form {
