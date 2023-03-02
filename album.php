@@ -78,7 +78,7 @@ if (!isset($_GET['admin'])) {
                 ?>
             </ul>
             <?php
-            if ((isset($_GET['admin']) and $_GET['admin'] == "yes") or (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes")) {
+            if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                 echo <<<EOL
                 <div id='banner-input'>
                 <form id='form' action="album.php" method="post" enctype="multipart/form-data">
@@ -141,7 +141,7 @@ if (!isset($_GET['admin'])) {
                     echo "<div id='popup'>Skopiowano</div>";
                     echo "<p id='link' onclick=copyToClipboard()>Kliknij, aby skopiować adres albumu</p>";
                     echo "<p style='display: none' id='toCopy'>" . $link . "</p>";
-                    if ((isset($_GET['admin']) and $_GET['admin'] == "yes") or (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes")) {
+                    if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                         echo "<a class='back' onclick=fadeOut('./home.php?admin=yes')>Powrót do panelu administratora</a>";
                         echo "</span>";
                         echo "<p style='text-align: center; margin-bottom: 0.5rem; margin-top: 1rem'>Wybierz monetę, aby edytować</p>";
@@ -205,7 +205,7 @@ if (!isset($_GET['admin'])) {
                                 echo "<div class='panel-main'>";
                                 $row[0] = str_replace(' ', '%20', $row[0]);
                                 $_SESSION['album'] = str_replace(' ', '%20', $_SESSION['album']);
-                                if (isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                                if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                                     echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '&admin=yes")>';
                                 } else {
                                     echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '")>';
