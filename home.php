@@ -26,7 +26,7 @@ session_start();
                             <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
                         </li>
                         <li>
-                            <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
+                            <a onclick=fadeOut("./dodaj.php")>Dodaj przedmiot</a>
                         </li>
                         <li>
                             <a onclick=fadeOut("./home.php?admin=yes")>Panel administratora</a>
@@ -82,11 +82,24 @@ session_start();
             echo <<<EOL
                 </select>
                 </form>
+                <div id='switch-wrapper'>
+                <p>Widok: </p>
+                <div id='view-list' onclick=changeView(this.id)>
+                <div class='button-element-list'></div>
+                <div class='button-element-list'></div>
+                <div class='button-element-list'></div>
+                <div class='button-element-list'></div>
+                </div>
+                </div>
                 </span>
                 EOL;
-            ?>
-            <div id="panels">
-                <?php
+            $flag = 0;
+            while ($flag != 2) {
+                if ($flag == 0) {
+                    echo "<div id='panels'>";
+                } else {
+                    echo "<div id='panels-row'>";
+                }
                 $polaczenie = mysqli_connect('localhost', 'root', '');
                 try {
                     mysqli_select_db($polaczenie, 'monety');
@@ -116,9 +129,9 @@ session_start();
                     while ($tables = mysqli_fetch_row($tablesQuery)) {
                         $newTables = str_replace(' ', '%20', $tables[0]);
                         echo "<div class='panel'>
-                    <div class='panel-title'>
-                    <h1>" . $tables[0] . "</h1>
-                                </div>";
+                        <div class='panel-title'>
+                        <h1>" . $tables[0] . "</h1>
+                        </div>";
                         echo "<div class='panel-main'>";
                         if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                             if (file_exists("images/" . $tables[0] . "/face.tmp"))
@@ -134,15 +147,17 @@ session_start();
                         echo "</div></div>";
                     }
                 }
-
-                ?>
-            </div>
-            <?php
-            if (isset($_GET['changed'])) {
-                echo "<p style='margin-top:1.5rem; text-align: center'>Informacje zostały zaktualizowane</p>";
+                echo "</div>";
+                $flag++;
             }
             ?>
         </div>
+        <?php
+        if (isset($_GET['changed'])) {
+            echo "<p style='margin-top:1.5rem; text-align: center'>Informacje zostały zaktualizowane</p>";
+        }
+        ?>
+    </div>
     </div>
     <footer>
         <a href='https://github.com/voytech-47'>autor: Wojciech Grzybowski</a>

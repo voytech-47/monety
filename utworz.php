@@ -29,7 +29,7 @@ if (!$_SESSION['zalogowany']) {
                             <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
                         </li>
                         <li>
-                            <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
+                            <a onclick=fadeOut("./dodaj.php")>Dodaj przedmiot</a>
                         </li>
                         <li>
                             <a onclick=fadeOut("./home.php?admin=yes")>Panel administratora</a>

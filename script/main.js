@@ -8,6 +8,21 @@ window.onload = function() {
     })
 }
 
+function changeView(id) {
+    const view1 = document.getElementById('panels')
+    const view2 = document.getElementById('panels-row')
+    const parent = document.getElementById(id)
+    if (view1.style.display == 'none') {
+        view1.style.display = 'flex'
+        view2.style.display = 'none'
+        parent.setAttribute('id', 'view-list')
+    } else {
+        view1.style.display = 'none'
+        view2.style.display = 'flex'
+        parent.setAttribute('id', 'view-grid')
+    }
+}
+
 function fadeOut(href) {
     // document.body.style = ''
     document.body.style = "animation: fadeOut ease 0.1s; animation-iteration-count: 1; animation-fill-mode: backwards;"

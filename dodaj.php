@@ -29,7 +29,7 @@ if (!$_SESSION['zalogowany']) {
                             <a onclick=fadeOut("./utworz.php")>Utwórz album</a>
                         </li>
                         <li>
-                            <a onclick=fadeOut("./dodaj.php")>Dodaj monetę</a>
+                            <a onclick=fadeOut("./dodaj.php")>Dodaj przedmiot</a>
                         </li>
                         <li>
                             <a onclick=fadeOut("./home.php?admin=yes")>Panel administratora</a>
@@ -79,7 +79,7 @@ if (!$_SESSION['zalogowany']) {
                             echo "<option value='brak' selected>brak albumów</option>";
                             echo "</select>";
                             echo "</span>";
-                            echo "<input type='submit' value='Dodaj monetę' disabled>";
+                            echo "<input type='submit' value='Dodaj przedmiot' disabled>";
                         } else {
                             echo "<select name='album' id='album'>";
                             while ($row = mysqli_fetch_row($query)) {
@@ -87,7 +87,7 @@ if (!$_SESSION['zalogowany']) {
                             }
                             echo "</select>";
                             echo "</span>";
-                            echo "<input type='submit' value='Dodaj monetę'>";
+                            echo "<input type='submit' value='Dodaj przedmiot'>";
                         }
                         ?>
                 </form>
