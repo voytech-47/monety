@@ -182,3 +182,9 @@ input[type='text'] {
         opacity: 0;
     }
 }
+
+#panel-left {
+    width: 300px;
+    height: 300px;
+    
+}
