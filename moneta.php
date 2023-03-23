@@ -26,6 +26,7 @@ if (!isset($_GET['admin'])) {
 </head>
 
 <body>
+    <script src="./script/moneta.js"></script>
     <?php
     if (isset($_POST['deleteCheck'])) {
         $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
@@ -224,6 +225,7 @@ if (!isset($_GET['admin'])) {
                 <div id="settings">
                     <?php
                     if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
+
                     } else {
                         echo "<p style='margin-bottom:.7rem'>Album: <i>" . $_SESSION['album'] . "</i></p>";
                         echo "<p style='margin-bottom:.7rem'>Nazwa: <i>" . $row[0] . "</i></p>";
@@ -251,6 +253,7 @@ if (!isset($_GET['admin'])) {
                             <label for="magnify-select">Wybierz zdjęcie: </label>
                             <select name="magnify-select" id="magnify-select" onchange="selectMagnify(this.value)">
                                 <?php
+                                $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
                                 $q = "SELECT zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                                 $query = mysqli_query($polaczenie, $q);
                                 $row = mysqli_fetch_row($query);
@@ -274,34 +277,12 @@ if (!isset($_GET['admin'])) {
                             <span id='magnify-value' style='padding:15px'>2x</span>
                         </span>
                     </div>
-                    <!-- <div id="lupa-top" style='margin-bottom:0.7rem'>
-                        <span>
-                            <label for="magnify-top">Włącz lupę dla awersu</label>
-                            <input type="checkbox" name="magnify-top" id="magnify-top" oninput=checkMagnify("top")>
-                        </span>
-                        <span class='lupa-value'>
-                            <input type="range" value=2 min=1.5 max=5 step=0.5 oninput=changeMagnifyTop(this.value)
-                                name="strength-top" id="strength-top">
-                            <span id='magnify-value-top' style='padding:15px'>2x</span>
-                        </span>
-                    </div>
-                    <div id="lupa-bot">
-                        <span>
-                            <label for="magnify-bot">Włącz lupę dla rewersu</label>
-                            <input type="checkbox" name="magnify-bot" id="magnify-bot" oninput=checkMagnify("bot")>
-                        </span>
-                        <span class='lupa-value'>
-                            <input type="range" value=2 min=1.5 max=5 step=0.5 oninput=changeMagnifyBot(this.value)
-                                name="strength-bot" id="strength-bot">
-                            <span id='magnify-value-bot' style='padding:15px'>2x</span>
-                        </span>
-                    </div> -->
                 </div>
             </div>
         </div>
     </div>
     <script src="./script/main.js"></script>
-    <script src="script/moneta.js"></script>
+    <script src="./script/moneta.js"></script>
     <script>
         function checkMagnify() {
             value = document.getElementById('magnify-select').value
@@ -309,32 +290,11 @@ if (!isset($_GET['admin'])) {
                 try {
                     document.getElementById('img-magnifier-glass').remove()
                 } catch (error) {
-                    
+
                 }
             } else {
                 magnify(value)
             }
-            // if (value == "top") {
-            //     if (!document.getElementById('magnify-top').checked) {
-            //         document.getElementById('img-magnifier-glass-top').remove()
-            //         return
-            //     }
-            //     if (document.getElementById('magnify-bot').checked) {
-            //         document.getElementById('img-magnifier-glass-bot').remove()
-            //         document.getElementById('magnify-bot').checked = false
-            //     }
-            //     magnify('top', 'img-top', 2)
-            // } else {
-            //     if (!document.getElementById('magnify-bot').checked) {
-            //         document.getElementById('img-magnifier-glass-bot').remove()
-            //         return
-            //     }
-            //     if (document.getElementById('magnify-top').checked) {
-            //         document.getElementById('img-magnifier-glass-top').remove()
-            //         document.getElementById('magnify-top').checked = false
-            //     }
-            //     magnify('bot', 'img-bot', 2)
-            // }
         }
     </script>
     <footer>

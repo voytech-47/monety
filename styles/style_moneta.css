@@ -6,7 +6,7 @@
     position: relative;
 }
 
-.img-magnifier-glass-wrap:first-child {
+.img-magnifier-glass-wrap:not(:last-child) {
     margin-bottom: 1rem;
 }
 

@@ -1,5 +1,21 @@
 <?php
 session_start();
+if (!isset($_GET['admin'])) {
+    foreach ($_POST as $key => $value) {
+        if ($key == "nazwa")
+            $_SESSION["newNazwa"] = $value;
+        else if ($key = "opis")
+            $_SESSION["newOpis"] = $value;
+        else
+            $_SESSION[$key] = $value;
+    }
+} else {
+    foreach ($_GET as $key => $value) {
+        $_SESSION[$key] = $value;
+    }
+}
+
+unset($_SESSION['admin']);
 ?>
 <!DOCTYPE html>
 <html lang="pl">
