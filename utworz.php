@@ -73,6 +73,8 @@ if (!$_SESSION['zalogowany']) {
                 $createQuery = "CREATE TABLE `" . strval($_POST['nazwa']) . "` (
                         `id` INT NOT NULL AUTO_INCREMENT,
                         `nazwa` VARCHAR(255) NOT NULL,
+                        `cena` INT,
+                        `wartosc` INT,
                         `opis` TEXT,
                         `zdjecie1` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
                         `zdjecie2` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
@@ -80,8 +82,6 @@ if (!$_SESSION['zalogowany']) {
                         `zdjecie4` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
                         `zdjecie5` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
                         `time` DATETIME NOT NULL,
-                        `price` INT,
-                        `value` INT,
                         PRIMARY KEY (`id`)
                       ) ENGINE = InnoDB;";
 
