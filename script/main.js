@@ -1,3 +1,5 @@
+// document.getElementById('zdjecia').addEventListener("click", countFiles)
+
 window.onload = function() {
     document.querySelectorAll('.img-top').forEach(element => {
         console.log(element.nextElementSibling.clientHeight)
@@ -64,4 +66,29 @@ function startAnimation() {
         box.style.animation = "";
         box.style.zIndex = 1;
     }, 1501);
+}
+
+isFileValid = false
+isNameValid = false
+function checkValidation(input, mode) {
+    if (mode == 'f') {
+        if (input.files.length > 5 || input.files.length == 0) {
+            input.style.color = 'red'
+            isFileValid = false
+        } else {
+            input.style.color = 'black'
+            isFileValid = true
+        }
+    } else {
+        if (input.checkValidity()) {
+            isNameValid = true
+        } else {
+            isNameValid = false
+        }
+    }
+    if (isNameValid && isFileValid) {
+        document.getElementById('submit').disabled = false
+    } else {
+        document.getElementById('submit').disabled = true
+    }
 }

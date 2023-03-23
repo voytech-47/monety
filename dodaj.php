@@ -52,21 +52,33 @@ if (!$_SESSION['zalogowany']) {
             <div id="form">
                 <form action="dodaj.php" method="post" enctype="multipart/form-data">
                     <h2>Wprowadź informacje dotyczące nowej monety:</h2>
-                    <span class="input">
+                    <span class="input-reversed">
+                        <input required type="text" name="nazwa" id="nazwa" oninput="checkValidation(this, 't')">
                         <label for="nazwa" id="nazwa-label">Nazwa:</label>
-                        <input required type="text" name="nazwa" id="nazwa">
                     </span>
                     <span class="input">
+                        <label for="cena" id="cena-label">Cena zakupu:</label>
+                        <input type="text" name="cena" id="cena">
+                    </span>
+                    <span class="input">
+                        <label for="wartosc" id="wartosc-label">Wartość:</label>
+                        <input type="text" name="wartosc" id="wartosc">
+                    </span>
+                    <!-- <span class="input">
                         <label for="awers">Awers:</label>
                         <input required type="file" name="awers" id="awers" accept=".jpg,.jpeg,.png,.jfif">
                     </span>
                     <span class="input">
                         <label for="rewers">Rewers:</label>
                         <input required type="file" name="rewers" id="rewers" accept=".jpg,.jpeg,.png,.jfif">
-                    </span>
+                    </span> -->
                     <span class="input input-textarea">
                         <label for="opis" id="opis-label">Opis:</label>
                         <textarea name="opis" id="opis"></textarea>
+                    </span>
+                    <span class="input">
+                        <label for="zdjecia" id="zdjecia-label">Dodaj zdjęcia: </label>
+                        <input required multiple type="file" name="zdjecia" id="zdjecia" accept=".jpg,.jpeg,.png,.jfif" oninput="checkValidation(this, 'f')">
                     </span>
                     <span class="input">
                         <label for="album">Wybierz album:</label>
@@ -79,7 +91,7 @@ if (!$_SESSION['zalogowany']) {
                             echo "<option value='brak' selected>brak albumów</option>";
                             echo "</select>";
                             echo "</span>";
-                            echo "<input type='submit' value='Dodaj przedmiot' disabled>";
+                            echo "<input type='submit' id='submit' value='Dodaj przedmiot' disabled>";
                         } else {
                             echo "<select name='album' id='album'>";
                             while ($row = mysqli_fetch_row($query)) {
@@ -87,7 +99,7 @@ if (!$_SESSION['zalogowany']) {
                             }
                             echo "</select>";
                             echo "</span>";
-                            echo "<input type='submit' value='Dodaj przedmiot'>";
+                            echo "<input disabled type='submit' id='submit' value='Dodaj przedmiot'>";
                         }
                         ?>
                 </form>

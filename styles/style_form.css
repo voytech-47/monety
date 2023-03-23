@@ -20,7 +20,14 @@ form>h2 {
     flex-direction: row;
 }
 
-.input input {
+.input-reversed {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: 0.5rem;
+}
+
+.input input,
+.input-reversed input {
     margin-right: auto;
 }
 
@@ -37,13 +44,16 @@ form>h2 {
     align-items: flex-start;
 }
 
-.input input:not([type="file"]) {
+.input input:not([type="file"]),
+.input-reversed input:not([type="file"]){
     display: inline-block;
     width: 100%;
 }
 
-.input label {
+.input label,
+.input-reversed label {
     margin-right: 5px;
+    min-width: 155px;
 }
 
 .input textarea {
@@ -57,4 +67,19 @@ form>h2 {
 
 #register {
     display: none;
+}
+
+.input-reversed input:invalid ~ label {
+    color: red;
+}
+
+input[type='file']:invalid {
+    color: red;
+}
+.input-reversed input:valid ~ label {
+    color: revert;
+}
+
+input[type='file']:valid {
+    color: revert;
 }
