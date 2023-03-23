@@ -105,38 +105,37 @@ if (!$_SESSION['zalogowany']) {
                         ?>
                 </form>
                 <?php
-                if (!isset($_POST['nazwa']) or !isset($_POST['opis'])) {
-                    return;
-                }
-                if (isset($_POST['cena']) and $_POST['cena'] == null) {
-                    $cena = 0;
-                } else {
-                    $cena = strval($_POST['cena']);
-                }
-                if (isset($_POST['wartosc']) and $_POST['wartosc'] == null) {
-                    $wartosc = 0;
-                } else {
-                    $wartosc = strval($_POST['wartosc']);
-                }
-                $insertQuery = "INSERT INTO `" . strval($_POST['album']) . "` VALUES (NULL, '" . strval($_POST['nazwa']) . "', '" . strval($cena) . "', '" . strval($wartosc) . "', '" . strval($_POST['opis']) . "', ";
-                $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
-                for ($i = 0; $i < 5; $i++) {
-                    if ($i+1 > count($_FILES['zdjecia']['name'])) {
-                        $insertQuery .= "'', ";
-                        continue;
+                if (isset($_POST['nazwa']) or isset($_POST['opis'])) {
+                    if (isset($_POST['cena']) and $_POST['cena'] == null) {
+                        $cena = 0;
+                    } else {
+                        $cena = strval($_POST['cena']);
                     }
-                    $target_photo = "images/" . strval($_POST['album']) . "/" . basename($_FILES['zdjecia']['name'][$i]);
-                    $fileType_photo = pathinfo($target_photo, PATHINFO_EXTENSION);
-                    if (in_array($fileType_photo, $allowed)) {
-                        move_uploaded_file($_FILES['zdjecia']['tmp_name'][$i], $target_photo);
+                    if (isset($_POST['wartosc']) and $_POST['wartosc'] == null) {
+                        $wartosc = 0;
+                    } else {
+                        $wartosc = strval($_POST['wartosc']);
                     }
-                    $insertQuery .= "'" . $_FILES['zdjecia']['name'][$i] . "', ";
+                    $insertQuery = "INSERT INTO `" . strval($_POST['album']) . "` VALUES (NULL, '" . strval($_POST['nazwa']) . "', '" . strval($cena) . "', '" . strval($wartosc) . "', '" . strval($_POST['opis']) . "', ";
+                    $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
+                    for ($i = 0; $i < 5; $i++) {
+                        if ($i + 1 > count($_FILES['zdjecia']['name'])) {
+                            $insertQuery .= "'', ";
+                            continue;
+                        }
+                        $target_photo = "images/" . strval($_POST['album']) . "/" . basename($_FILES['zdjecia']['name'][$i]);
+                        $fileType_photo = pathinfo($target_photo, PATHINFO_EXTENSION);
+                        if (in_array($fileType_photo, $allowed)) {
+                            move_uploaded_file($_FILES['zdjecia']['tmp_name'][$i], $target_photo);
+                        }
+                        $insertQuery .= "'" . $_FILES['zdjecia']['name'][$i] . "', ";
+                    }
+                    $insertQuery .= "NOW());";
+                    // echo $insertQuery;
+                    mysqli_query($polaczenie, $insertQuery);
+                    echo "<p style='margin-top: 2rem'>Dodano monetę <i>" . strval($_POST['nazwa']) . "</i> do katalogu <i>" . strval($_POST['album']) . "</i>.</p>";
+                    mysqli_close($polaczenie);
                 }
-                $insertQuery .= "NOW());";
-                // echo $insertQuery;
-                mysqli_query($polaczenie, $insertQuery);
-                echo "<p style='margin-top: 2rem'>Dodano monetę <i>" . strval($_POST['nazwa']) . "</i> do katalogu <i>" . strval($_POST['album']) . "</i>.</p>";
-                mysqli_close($polaczenie);
                 ?>
             </div>
         </div>

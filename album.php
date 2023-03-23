@@ -187,9 +187,9 @@ if (!isset($_GET['admin'])) {
                     );
                     $album = str_replace('%20', ' ', $_SESSION['album']);
                     if (isset($_POST['sort'])) {
-                        $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $album . "` " . $sortQuery[$_POST['sort']] . ";";
+                        $showQuery = "SELECT nazwa, opis, zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `" . $album . "` " . $sortQuery[$_POST['sort']] . ";";
                     } else {
-                        $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $album . "`;";
+                        $showQuery = "SELECT nazwa, opis, zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `" . $album . "`;";
                     }
                     $query = mysqli_query($polaczenie, $showQuery);
                     if (mysqli_num_rows($query) == 0) {

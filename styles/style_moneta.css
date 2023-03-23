@@ -1,23 +1,23 @@
-* {box-sizing: border-box;}
-
-#img-magnifier-glass-wrap-top,
-#img-magnifier-glass-wrap-bot {
-  position: relative;
+* {
+    box-sizing: border-box;
 }
 
-#img-magnifier-glass-wrap-top {
+.img-magnifier-glass-wrap {
+    position: relative;
+}
+
+.img-magnifier-glass-wrap:first-child {
     margin-bottom: 1rem;
 }
 
-#img-magnifier-glass-top,
-#img-magnifier-glass-bot {
-  position: absolute;
-  border: 3px solid #000;
-  border-radius: 25%;
-  cursor: none;
-  /*Set the size of the magnifier glass:*/
-  width: 200px;
-  height: 200px;
+#img-magnifier-glass {
+    position: absolute;
+    border: 3px solid #000;
+    border-radius: 25%;
+    cursor: none;
+    /*Set the size of the magnifier glass:*/
+    width: 200px;
+    height: 200px;
 }
 
 #nav-bar {
@@ -83,6 +83,7 @@
         align-content: stretch;
         justify-content: center;
     }
+
     #side {
         margin-left: 0;
     }
@@ -162,6 +163,7 @@ input[type="range"] {
 
 .input label {
     margin-right: 5px;
+    cursor: pointer;
 }
 
 .input textarea {
@@ -183,12 +185,21 @@ input[type="range"] {
     cursor: pointer;
 }
 
-.lupa-value {
+.magnify-value {
     display: flex;
     align-items: baseline;
     justify-content: flex-start;
     flex-direction: row;
     flex-wrap: nowrap;
+}
+
+#lupa {
+    display: flex;
+    flex-direction: column;
+}
+
+#lupa>span {
+    margin-bottom: 0.7rem;
 }
 
 .panel-main {

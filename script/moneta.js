@@ -6,6 +6,37 @@ function moveCoin(value) {
     }
 }
 
+function highlightPhoto(image) {
+    suffix = image.id.slice(-1)
+    id = "img"+suffix
+    try {
+        document.getElementById(id).style.border = "solid 3px red"
+    } catch (error) {
+        return
+    }
+}
+
+function unHighlightPhoto(image) {
+    suffix = image.id.slice(-1)
+    id = "img"+suffix
+    try {
+        document.getElementById(id).style.border = "none"
+    } catch (error) {
+        return
+    }
+}
+
+function selectMagnify(value) {
+    try {
+    document.getElementById('img-magnifier-glass').remove()
+    } catch (error) {
+        
+    }
+
+    document.getElementById('magnify').checked = false
+    document.getElementById('label-zdjecie').innerHTML = "Włącz lupę dla zdjęcia "+value+"."
+}
+
 function changeBrightness(value) {
     if (document.getElementById("img-magnifier-glass-top") != null) {
         document.getElementById("img-magnifier-glass-top").style.filter = "brightness("+document.getElementById("brightness_input").value+"%) contrast(" + document.getElementById("contrast_input").value + "%)";
@@ -30,29 +61,20 @@ function changeContrast(value) {
     document.getElementById("contrast_value").innerHTML = value + "%"
 }
 
-function changeMagnifyTop(value) {
-    document.getElementById('magnify-value-top').innerHTML = value+"%"
-    var img = document.getElementById('img-top')
-    document.getElementById('img-magnifier-glass-top').style.backgroundSize = (img.width * value) + "px " + (img.height * value) + "px";
+function changeMagnify(value) {
+    document.getElementById('magnify-value').innerHTML = value+"%"
+    id = document.getElementById('magnify-select').value
+    var img = document.getElementById('img'+id)
+    document.getElementById('img-magnifier-glass').style.backgroundSize = (img.width * value) + "px " + (img.height * value) + "px";
 }
 
-function changeMagnifyBot(value) {
-    document.getElementById('magnify-value-bot').innerHTML = value+"%"
-    var img = document.getElementById('img-bot')
-    document.getElementById('img-magnifier-glass-bot').style.backgroundSize = (img.width * value) + "px " + (img.height * value) + "px";
-}
-
-function magnify(imgPOS, imgID) {
+function magnify(imgID) {
     var img, glass, w, h, bw, zoom;
-    if (imgPOS == 'img-top') {
-        zoom = document.getElementById('strength-top').value
-    } else {
-        zoom = document.getElementById('strength-bot').value
-    }
-    img = document.getElementById(imgID);
+    zoom = document.getElementById('strength').value
+    img = document.getElementById("img"+imgID);
     /*create magnifier glass:*/
     glass = document.createElement("DIV");
-    glassID = "img-magnifier-glass-"+imgPOS;
+    glassID = "img-magnifier-glass";
     glass.setAttribute("id", glassID);
     /*insert magnifier glass:*/
     img.parentElement.insertBefore(glass, img);
@@ -71,16 +93,9 @@ function magnify(imgPOS, imgID) {
     /*and also for touch screens:*/
     glass.addEventListener("touchmove", moveMagnifier);
     img.addEventListener("touchmove", moveMagnifier);
-    glass.imgPOS = imgPOS
-    img.imgPOS = imgPOS
     function moveMagnifier(e) {
         var pos, x, y, zoom;
-        console.log(e.currentTarget.imgPOS)
-        if (e.currentTarget.imgPOS == 'top') {
-            zoom = document.getElementById('strength-top').value
-        } else {
-            zoom = document.getElementById('strength-bot').value
-        }
+        zoom = document.getElementById('strength').value
         /*prevent any other actions that may occur when moving over the image*/
         glass.style.backgroundSize = (img.width * zoom) + "px " + (img.height * zoom) + "px";
         e.preventDefault();

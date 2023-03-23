@@ -93,15 +93,19 @@ if (!isset($_GET['admin'])) {
                 <div class="panel-main">
                     <?php
                     $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
-                    $showQuery = "SELECT nazwa, opis, awers, rewers FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
+                    $showQuery = "SELECT nazwa, opis, zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                     $query = mysqli_query($polaczenie, $showQuery);
                     $row = mysqli_fetch_row($query);
-                    if (!empty($_FILES['awers']['name'])) {
-                        echo "<span id='img-magnifier-glass-wrap-top'><img id='img-top' src='images/" . $_SESSION['album'] . "/" . basename($_FILES['awers']['name']) . "'></span>";
-                        echo "<span id='img-magnifier-glass-wrap-bot'><img id='img-bot' src='images/" . $_SESSION['album'] . "/" . basename($_FILES['rewers']['name']) . "'></span>";
-                    } else {
-                        echo "<span id='img-magnifier-glass-wrap-top'><img id='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "'></span>";
-                        echo "<span id='img-magnifier-glass-wrap-bot'><img id='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "'></span>";
+                    for ($i = 1; $i < 6; $i++) {
+                        $name = "zdjecie" . $i;
+                        if ($row[$i + 1] == "") {
+                            break;
+                        }
+                        if (!empty($_FILES[$name]['name'])) {
+                            echo "<span class='img-magnifier-glass-wrap'><img id='img" . $i . "' src='images/" . $_SESSION['album'] . "/" . basename($_FILES[$name]['name']) . "'></span>";
+                        } else {
+                            echo "<span class='img-magnifier-glass-wrap'><img id='img" . $i . "' src='images/" . $_SESSION['album'] . "/" . $row[$i + 1] . "'></span>";
+                        }
                     }
                     ?>
                 </div>
@@ -109,7 +113,7 @@ if (!isset($_GET['admin'])) {
             <div id="side">
                 <?php
                 if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
-                    $adminQuery = "SELECT nazwa, opis FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
+                    $adminQuery = "SELECT nazwa, opis, zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                     $query2 = mysqli_query($polaczenie, $adminQuery);
                     $row = mysqli_fetch_row($query2);
                     echo <<<EOL
@@ -131,15 +135,14 @@ if (!isset($_GET['admin'])) {
                     else
                         echo '<textarea name="opis" id="opis">' . $row[1] . '</textarea>';
                     echo "</span>";
+
+                    for ($i = 1; $i < 6; $i++) {
+                        echo '<span class="input" style="margin-bottom: 0.5rem">';
+                        echo '<label for="zdjecie' . $i . '" id="label-zdjecie' . $i . '" style="margin-bottom: 0.5rem" onmouseover="highlightPhoto(this)" onmouseout="unHighlightPhoto(this)">Zdjęcie ' . $i . '</label>';
+                        echo '<input type="file" name="zdjecie' . $i . '" id="zdjecie' . $i . '" accept=".jpg,.jpeg,.png,.jfif">';
+                        echo '</span>';
+                    }
                     echo <<<EOL
-                    <span class="input" style="margin-bottom: 0.5rem">
-                    <label for="awers">Awers:</label>
-                    <input type="file" name="awers" id="awers" accept=".jpg,.jpeg,.png,.jfif">
-                    </span>
-                    <span class="input" style="margin-bottom: 0.5rem">
-                    <label for="rewers">Rewers:</label>
-                    <input type="file" name="rewers" id="rewers" accept=".jpg,.jpeg,.png,.jfif">
-                    </span>
                     <span class="input" style="margin-bottom: 1rem">
                     <label for="move">Przenieś do:</label>
                     EOL;
@@ -164,45 +167,38 @@ if (!isset($_GET['admin'])) {
                     echo "<button type='button' id='delete' formmethod='post' form='form' style='margin-bottom: 1.5rem; width: 100%' onclick='usun(true)'>Usuń monetę</button>";
                     echo "</form>";
                     if (isset($_POST['nazwa'])) {
-                        $deleteQuery = "SELECT awers, rewers FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
+                        $deleteQuery = "SELECT zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
                         $deleteQ = mysqli_query($polaczenie, $deleteQuery);
                         $row = mysqli_fetch_row($deleteQ);
                         $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "', time = NOW() WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
                         $query3 = mysqli_query($polaczenie, $updateQuery);
                         $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
-                        if ($_FILES['awers']['name'] != "") {
-                            $oldAwers = "images/" . strval($_SESSION['album']) . "/" . $row[0];
-                            unlink($oldAwers);
-                            $updateAwers = "UPDATE `" . $_SESSION['album'] . "` SET awers='" . $_FILES['awers']['name'] . "', time = NOW() WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
-                            $target_awers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['awers']['name']);
-                            $fileType_awers = pathinfo($target_awers, PATHINFO_EXTENSION);
-                            if (in_array($fileType_awers, $allowed)) {
-                                move_uploaded_file($_FILES['awers']['tmp_name'], $target_awers);
+                        for ($i = 0; $i < 5; $i++) {
+                            $name = "zdjecie" . $i;
+                            if ($_FILES[$name]['name'] != "") {
+                                $oldPhoto = "images/" . strval($_SESSION['album']) . "/" . $row[$i];
+                                unlink($oldPhoto);
+                                $updatePhoto = "UPDATE `" . $_SESSION['album'] . "` SET zdjecie" . $i . "='" . $_FILES[$name]['name'] . "', time = NOW() WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
+                                $targetPhoto = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES[$name]['name']);
+                                $fileType_photo = pathinfo($target_photo, PATHINFO_EXTENSION);
+                                if (in_array($fileType_photo, $allowed)) {
+                                    move_uploaded_file($_FILES[$name]['tmp_name'], $target_photo);
+                                }
+                                $query4 = mysqli_query($polaczenie, $updatePhoto);
                             }
-                            $query4 = mysqli_query($polaczenie, $updateAwers);
-                        }
-                        if ($_FILES['rewers']['name'] != "") {
-                            $oldRewers = "images/" . strval($_SESSION['album']) . "/" . $row[1];
-                            unlink($oldRewers);
-                            $updateRewers = "UPDATE `" . $_SESSION['album'] . "` SET rewers='" . $_FILES['rewers']['name'] . "', time = NOW() WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
-                            $target_rewers = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES['rewers']['name']);
-                            $fileType_rewers = pathinfo($target_rewers, PATHINFO_EXTENSION);
-                            if (in_array($fileType_rewers, $allowed)) {
-                                move_uploaded_file($_FILES['rewers']['tmp_name'], $target_rewers);
-                            }
-                            $query5 = mysqli_query($polaczenie, $updateRewers);
                         }
                         if (isset($_POST['move'])) {
                             mysqli_begin_transaction($polaczenie);
-                            $imagesQ = "SELECT awers, rewers FROM `%s` WHERE nazwa = '%s';";
+                            $imagesQ = "SELECT zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `%s` WHERE nazwa = '%s';";
                             $query6 = mysqli_query($polaczenie, sprintf($imagesQ, $_SESSION['album'], $_POST['nazwa']));
                             $row = mysqli_fetch_row($query6);
-                            $oldDirAwers = "images/" . $_SESSION['album'] . "/" . $row[0];
-                            $oldDirRewers = "images/" . $_SESSION['album'] . "/" . $row[1];
-                            $newDirAwers = "images/" . $_POST['move'] . "/" . $row[0];
-                            $newDirRewers = "images/" . $_POST['move'] . "/" . $row[1];
-                            rename($oldDirAwers, $newDirAwers);
-                            rename($oldDirRewers, $newDirRewers);
+                            for ($i = 0; $i < 5; $i++) {
+                                if ($row[$i] == '')
+                                    break;
+                                $oldDir = "images/" . $_SESSION['album'] . "/" . $row[$i];
+                                $newDir = "images/" . $_POST['move'] . "/" . $row[$i];
+                                rename($oldDir, $newDir);
+                            }
                             try {
                                 $tempInsert = "INSERT INTO `%s` SELECT * FROM `%s` WHERE nazwa = '%s';";
                                 $tempDelete = "DELETE FROM `%s` WHERE nazwa = '%s';";
@@ -250,7 +246,35 @@ if (!isset($_GET['admin'])) {
                         <input min=50 max=200 value=100 type="range" name="contrast" id="contrast_input"
                             oninput="changeContrast(this.value)">
                     </div>
-                    <div id="lupa-top" style='margin-bottom:0.7rem'>
+                    <div id="lupa" style="margin-bottom: 0.7rem">
+                        <span>
+                            <label for="magnify-select">Wybierz zdjęcie: </label>
+                            <select name="magnify-select" id="magnify-select" onchange="selectMagnify(this.value)">
+                                <?php
+                                $q = "SELECT zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
+                                $query = mysqli_query($polaczenie, $q);
+                                $row = mysqli_fetch_row($query);
+                                for ($i = 1; $i < 6; $i++) {
+                                    if ($row[$i - 1] == "") {
+                                        break;
+                                    }
+                                    echo "<option value='" . $i . "'>Zdjęcie " . $i . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </span>
+                        <span>
+                            <label for="magnify" id='label-zdjecie'>Włącz lupę dla zdjęcia 1.</label>
+                            <input type="checkbox" name="magnify" id="magnify" oninput="checkMagnify()">
+                        </span>
+                        </span>
+                        <span class='magnify-value'>
+                            <input type="range" value=2 min=1.5 max=5 step=0.5 oninput="changeMagnify(this.value)"
+                                name="strength" id="strength">
+                            <span id='magnify-value' style='padding:15px'>2x</span>
+                        </span>
+                    </div>
+                    <!-- <div id="lupa-top" style='margin-bottom:0.7rem'>
                         <span>
                             <label for="magnify-top">Włącz lupę dla awersu</label>
                             <input type="checkbox" name="magnify-top" id="magnify-top" oninput=checkMagnify("top")>
@@ -271,7 +295,7 @@ if (!isset($_GET['admin'])) {
                                 name="strength-bot" id="strength-bot">
                             <span id='magnify-value-bot' style='padding:15px'>2x</span>
                         </span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -279,28 +303,38 @@ if (!isset($_GET['admin'])) {
     <script src="./script/main.js"></script>
     <script src="script/moneta.js"></script>
     <script>
-        function checkMagnify(value) {
-            if (value == "top") {
-                if (!document.getElementById('magnify-top').checked) {
-                    document.getElementById('img-magnifier-glass-top').remove()
-                    return
+        function checkMagnify() {
+            value = document.getElementById('magnify-select').value
+            if (!document.getElementById('magnify').checked) {
+                try {
+                    document.getElementById('img-magnifier-glass').remove()
+                } catch (error) {
+                    
                 }
-                if (document.getElementById('magnify-bot').checked) {
-                    document.getElementById('img-magnifier-glass-bot').remove()
-                    document.getElementById('magnify-bot').checked = false
-                }
-                magnify('top', 'img-top', 2)
             } else {
-                if (!document.getElementById('magnify-bot').checked) {
-                    document.getElementById('img-magnifier-glass-bot').remove()
-                    return
-                }
-                if (document.getElementById('magnify-top').checked) {
-                    document.getElementById('img-magnifier-glass-top').remove()
-                    document.getElementById('magnify-top').checked = false
-                }
-                magnify('bot', 'img-bot', 2)
+                magnify(value)
             }
+            // if (value == "top") {
+            //     if (!document.getElementById('magnify-top').checked) {
+            //         document.getElementById('img-magnifier-glass-top').remove()
+            //         return
+            //     }
+            //     if (document.getElementById('magnify-bot').checked) {
+            //         document.getElementById('img-magnifier-glass-bot').remove()
+            //         document.getElementById('magnify-bot').checked = false
+            //     }
+            //     magnify('top', 'img-top', 2)
+            // } else {
+            //     if (!document.getElementById('magnify-bot').checked) {
+            //         document.getElementById('img-magnifier-glass-bot').remove()
+            //         return
+            //     }
+            //     if (document.getElementById('magnify-top').checked) {
+            //         document.getElementById('img-magnifier-glass-top').remove()
+            //         document.getElementById('magnify-top').checked = false
+            //     }
+            //     magnify('bot', 'img-bot', 2)
+            // }
         }
     </script>
     <footer>
