@@ -47,6 +47,9 @@ session_start();
         </div>
         <div id="main">
             <?php
+            if (isset($_GET['changed'])) {
+                echo "<p style='margin-top:1.5rem; margin-bottom: 1rem; text-align: center'>Informacje zostały zaktualizowane</p>";
+            }
             if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                 echo "<p style='text-align: center'>Wybierz, aby edytować album:</p>";
             }
@@ -82,24 +85,24 @@ session_start();
             echo <<<EOL
                 </select>
                 </form>
-                <div id='switch-wrapper'>
-                <p>Widok: </p>
-                <div id='view-list' onclick=changeView(this.id)>
-                <div class='button-element-list'></div>
-                <div class='button-element-list'></div>
-                <div class='button-element-list'></div>
-                <div class='button-element-list'></div>
-                </div>
-                </div>
                 </span>
                 EOL;
-            $flag = 0;
-            while ($flag != 2) {
-                if ($flag == 0) {
+                // <div id='switch-wrapper'>
+                // <p>Widok: </p>
+                // <div id='view-list' onclick=changeView(this.id)>
+                // <div class='button-element-list'></div>
+                // <div class='button-element-list'></div>
+                // <div class='button-element-list'></div>
+                // <div class='button-element-list'></div>
+                // </div>
+                // </div>
+            // $flag = 0;
+            // while ($flag != 2) {
+            //     if ($flag == 0) {
                     echo "<div id='panels'>";
-                } else {
-                    echo "<div id='panels-row'>";
-                }
+                // } else {
+                    // echo "<div id='panels-row'>";
+                // }
                 $polaczenie = mysqli_connect('localhost', 'root', '');
                 try {
                     mysqli_select_db($polaczenie, 'monety');
@@ -126,29 +129,29 @@ session_start();
                 if (mysqli_num_rows($tablesQuery) == 0) {
                     echo "<p style='text-align: center'>Brak albumów w bazie.</p>";
                 } else {
-                    if ($flag != 0) {
-                        while ($tables = mysqli_fetch_row($tablesQuery)) {
-                            $newTables = str_replace(' ', '%20', $tables[0]);
-                            echo "<div class='panel'>";
-                            echo "<div id='panel-left'>";
-                            if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                                if (file_exists("images/" . $tables[0] . "/face.tmp"))
-                                    echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
-                                else
-                                    echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
-                            } else {
-                                if (file_exists("images/" . $tables[0] . "/face.tmp"))
-                                    echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
-                                else
-                                    echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
-                            }
-                            echo "</div>";
-                            echo "<div id='panel-right'>";
-                            echo "<h1>" . $tables[0] . "</h1>";
-                            echo "</div>";
-                            echo "</div>";
-                        }
-                    } else {
+                    // if ($flag != 0) {
+                    //     while ($tables = mysqli_fetch_row($tablesQuery)) {
+                    //         $newTables = str_replace(' ', '%20', $tables[0]);
+                    //         echo "<div class='panel'>";
+                    //         echo "<div id='panel-left'>";
+                    //         if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                    //             if (file_exists("images/" . $tables[0] . "/face.tmp"))
+                    //                 echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                    //             else
+                    //                 echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "&admin=yes')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
+                    //         } else {
+                    //             if (file_exists("images/" . $tables[0] . "/face.tmp"))
+                    //                 echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/" . $tables[0] . "/face.tmp' alt='" . $tables[0] . "'></a>";
+                    //             else
+                    //                 echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
+                    //         }
+                    //         echo "</div>";
+                    //         echo "<div id='panel-right'>";
+                    //         echo "<h1>" . $tables[0] . "</h1>";
+                    //         echo "</div>";
+                    //         echo "</div>";
+                    //     }
+                    // } else {
 
                         while ($tables = mysqli_fetch_row($tablesQuery)) {
                             $newTables = str_replace(' ', '%20', $tables[0]);
@@ -169,19 +172,14 @@ session_start();
                                     echo "<a onclick=fadeOut('./album.php?album=" . $newTables . "')><img id='img-cover' src='images/face.tmp' alt='" . $tables[0] . "'></a>";
                             }
                             echo "</div></div>";
-                        }
+                        // }
                     }
                     echo "</div>";
-                    $flag++;
+                    // $flag++;
                 }
-            }
+            // }
             ?>
         </div>
-        <?php
-        if (isset($_GET['changed'])) {
-            echo "<p style='margin-top:1.5rem; text-align: center'>Informacje zostały zaktualizowane</p>";
-        }
-        ?>
     </div>
     </div>
     <footer>

@@ -6,6 +6,7 @@ window.onload = function() {
         if (element.clientWidth <= element.nextElementSibling.clientWidth)
             element.parentNode.parentNode.style.width = element.nextElementSibling.clientWidth + "px"
     })
+    document.getElementById('panels-row').style.display = 'none';
 }
 
 function changeView(id) {

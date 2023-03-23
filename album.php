@@ -154,14 +154,26 @@ if (!isset($_GET['admin'])) {
                     </select>
                     </form>
                     EOL;
+                    echo <<<EOL
+                    <div id='switch-wrapper'>
+                    <p>Widok: </p>
+                    <div id='view-list' onclick=changeView(this.id)>
+                    <div class='button-element-list'></div>
+                    <div class='button-element-list'></div>
+                    <div class='button-element-list'></div>
+                    <div class='button-element-list'></div>
+                    </div>
+                    </div>
+                    EOL;
                     echo "</span>";
                 }
-                ?>
-                <div id="panels">
-                    <?php
-                    // if (!isset($_GET['nazwa'])) {
-                    //     header("Location: home.php");
-                    // }
+                $flag = 0;
+                while ($flag != 2) {
+                    if ($flag == 0) {
+                        echo "<div id='panels'>";
+                    } else {
+                        echo "<div id='panels-row'>";
+                    }
                     $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
                     $sortQuery = array(
                         "alphaAsc" => "ORDER BY `nazwa` ASC",
@@ -169,7 +181,9 @@ if (!isset($_GET['admin'])) {
                         "dateDesc" => "ORDER BY `id` DESC",
                         "dateAsc" => "ORDER BY `id` ASC",
                         "updateDesc" => "ORDER BY `time` DESC",
-                        "updateAsc" => "ORDER BY `time` ASC"
+                        "updateAsc" => "ORDER BY `time` ASC",
+                        "priceDesc" => "ORDER BY `price` DESC",
+                        "priceAsc" => "ORDER BY `price` ASC"
                     );
                     $album = str_replace('%20', ' ', $_SESSION['album']);
                     if (isset($_POST['sort'])) {
@@ -181,25 +195,53 @@ if (!isset($_GET['admin'])) {
                     if (mysqli_num_rows($query) == 0) {
                         echo "<p style='text-align: center; margin-bottom: 1rem'>Brak monet w albumie.</p>";
                     } else {
-                        while ($row = mysqli_fetch_row($query)) {
-                            echo "<div class='panel'>";
-                            echo "<div class='panel-title'>";
-                            echo "<h1>" . $row[0] . "</h1>";
-                            echo "</div>";
-                            echo "<div class='panel-main'>";
-                            $row[0] = str_replace(' ', '%20', $row[0]);
-                            $_SESSION['album'] = str_replace(' ', '%20', $_SESSION['album']);
-                            if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
-                                echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '&admin=yes")>';
-                            } else {
-                                echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '")>';
+                        if ($flag != 0) {
+                            while ($row = mysqli_fetch_row($query)) {
+                                echo "<div class='panel-row'>";
+                                echo "<div class='panel-left'>";
+                                $row[0] = str_replace(' ', '%20', $row[0]);
+                                $_SESSION['album'] = str_replace(' ', '%20', $_SESSION['album']);
+                                if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                                    echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '&admin=yes")>';
+                                } else {
+                                    echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '")>';
+                                }
+                                echo "<img class='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
+                                <img class='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
+                                </a>";
+                                echo "</div>";
+                                echo "<div class='panel-right'>";
+                                echo "<div class='info-wrap-left'>";
+                                echo "<h1>" . $row[0] . "</h1>";
+                                echo "<p>Opis: " . $row[1] . "</p>";
+                                echo "</div>";
+                                echo "<div class='info-wrap-right'>";
+                                echo "<p>Cena zakupu: </p>";
+                                echo "<p>Wartość: </p>";
+                                echo "</div>";
+                                echo "</div>";
+                                echo "</div>";
                             }
-                            echo "<img class='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
-                          <img class='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
-                          </a>";
-                            // echo "<p class='opis'>" . $row[1] . "</p>";
-                            echo "</div>";
-                            echo "</div>";
+                        } else {
+                            while ($row = mysqli_fetch_row($query)) {
+                                echo "<div class='panel'>";
+                                echo "<div class='panel-title'>";
+                                echo "<h1>" . $row[0] . "</h1>";
+                                echo "</div>";
+                                echo "<div class='panel-main'>";
+                                $row[0] = str_replace(' ', '%20', $row[0]);
+                                $_SESSION['album'] = str_replace(' ', '%20', $_SESSION['album']);
+                                if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
+                                    echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '&admin=yes")>';
+                                } else {
+                                    echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '")>';
+                                }
+                                echo "<img class='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
+                                <img class='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
+                                </a>";
+                                echo "</div>";
+                                echo "</div>";
+                            }
                         }
                     }
                     if (isset($_POST['album'])) {
@@ -211,20 +253,23 @@ if (!isset($_GET['admin'])) {
                             } catch (Exception $e) {
 
                             }
-                            $old = "./images/" . $_SESSION['album'];
+                            $old = str_replace('%20', ' ', "./images/" . $_SESSION['album']);
                             $new = "./images/" . $_POST['album'];
                             rename($old, $new);
                         }
                         mysqli_close($polaczenie);
                     }
-                    ?>
-                </div>
-                <?php
-                if (isset($_POST['album'])) {
-                    header("Location: home.php?admin=yes&changed=yes");
+                    echo "</div>";
+                    $flag++;
                 }
                 ?>
         </div>
+        <?php
+        if (isset($_POST['album'])) {
+            header("Location: home.php?admin=yes&changed=yes");
+        }
+        ?>
+    </div>
     </div>
     <footer>
         <a href='https://github.com/voytech-47'>autor: Wojciech Grzybowski</a>
