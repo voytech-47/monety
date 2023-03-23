@@ -127,11 +127,6 @@ html {
     align-items: flex-start;
 }
 
-.panel-left {
-    background-color: #edeff1;
-    border-radius: 10px 0 0 10px;
-}
-
 .panel-right {
     display: flex;
     border: 2px solid #edeff1;
@@ -143,7 +138,7 @@ html {
     justify-content: space-between;
 }
 
-.panel-right > div > p{
+.panel-right>div>p {
     font-size: 20px;
 }
 
@@ -186,6 +181,7 @@ a {
     align-content: flex-start;
     flex-wrap: wrap;
 }
+
 #panels-row {
     display: flex;
     flex-direction: column;

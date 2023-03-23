@@ -33,7 +33,11 @@ if (!isset($_GET['admin'])) {
         $deleteQ = "DELETE FROM `" . $_SESSION['album'] . "` WHERE nazwa = '" . $_SESSION['nazwa'] . "' LIMIT 1;";
         $query = mysqli_query($polaczenie, $deleteQ);
         mysqli_close($polaczenie);
-        header("Location: album.php?album=" . $_SESSION['album'] . "&admin=yes");
+        ?>
+        <script type="text/javascript">
+            window.location.href = 'album.php?admin=yes'
+        </script>
+        <?php
     }
     ?>
     <div id="wrapper">
@@ -174,7 +178,7 @@ if (!isset($_GET['admin'])) {
                         $updateQuery = "UPDATE `" . $_SESSION['album'] . "` SET nazwa = '" . $_POST['nazwa'] . "', opis='" . $_POST['opis'] . "', time = NOW() WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
                         $query3 = mysqli_query($polaczenie, $updateQuery);
                         $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
-                        for ($i = 0; $i < 5; $i++) {
+                        for ($i = 1; $i < 6; $i++) {
                             $name = "zdjecie" . $i;
                             if ($_FILES[$name]['name'] != "") {
                                 $oldPhoto = "images/" . strval($_SESSION['album']) . "/" . $row[$i];
@@ -209,7 +213,11 @@ if (!isset($_GET['admin'])) {
                                 mysqli_query($polaczenie, $query8);
                                 mysqli_commit($polaczenie);
                                 mysqli_close($polaczenie);
-                                header("Location: album.php?album=" . $_SESSION['album'] . "&admin=yes");
+                                ?>
+                                <script type="text/javascript">
+                                    window.location.href = 'album.php?admin=yes'
+                                </script>
+                                <?php
                             } catch (mysqli_sql_exception $e) {
                                 mysqli_rollback($polaczenie);
                                 throw $e;
@@ -227,9 +235,15 @@ if (!isset($_GET['admin'])) {
                     if (isset($_SESSION['admin']) and $_SESSION['admin'] == "yes") {
 
                     } else {
+                        $polaczenie = mysqli_connect('localhost', 'root', '', 'monety');
+                        $showQuery = "SELECT nazwa, cena, wartosc, opis FROM `" . $_SESSION['album'] . "` WHERE nazwa='" . $_SESSION['nazwa'] . "';";
+                        $query = mysqli_query($polaczenie, $showQuery);
+                        $row = mysqli_fetch_row($query);
                         echo "<p style='margin-bottom:.7rem'>Album: <i>" . $_SESSION['album'] . "</i></p>";
                         echo "<p style='margin-bottom:.7rem'>Nazwa: <i>" . $row[0] . "</i></p>";
-                        echo "<p style='margin-bottom:1rem;'>Opis: " . $row[1] . "</p>";
+                        echo "<p style='margin-bottom:.7rem'>Cena zakupu: <i>" . $row[1] . " zł</i></p>";
+                        echo "<p style='margin-bottom:.7rem'>Wartość: <i>" . $row[2] . " zł</i></p>";
+                        echo "<p style='margin-bottom:1rem;'>Opis: " . $row[3] . "</p>";
                     }
                     ?>
                     <div id="brightness">

@@ -36,7 +36,11 @@ if (!isset($_GET['admin'])) {
         $deleteQ = "DROP TABLE `" . $dropTable . "`;";
         $query = mysqli_query($polaczenie, $deleteQ);
         mysqli_close($polaczenie);
-        header("Location: home.php?admin=yes");
+        ?>
+        <script type="text/javascript">
+            window.location.href = 'home.php?admin=yes'
+        </script>
+        <?php
     }
     if (isset($_POST['album'])) {
         // $oldFace = "images/" . strval($_SESSION['album']) . "/face.tmp";
@@ -187,9 +191,9 @@ if (!isset($_GET['admin'])) {
                     );
                     $album = str_replace('%20', ' ', $_SESSION['album']);
                     if (isset($_POST['sort'])) {
-                        $showQuery = "SELECT nazwa, opis, zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `" . $album . "` " . $sortQuery[$_POST['sort']] . ";";
+                        $showQuery = "SELECT nazwa, opis, zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5, cena, wartosc FROM `" . $album . "` " . $sortQuery[$_POST['sort']] . ";";
                     } else {
-                        $showQuery = "SELECT nazwa, opis, zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5 FROM `" . $album . "`;";
+                        $showQuery = "SELECT nazwa, opis, zdjecie1, zdjecie2, zdjecie3, zdjecie4, zdjecie5, cena, wartosc FROM `" . $album . "`;";
                     }
                     $query = mysqli_query($polaczenie, $showQuery);
                     if (mysqli_num_rows($query) == 0) {
@@ -199,7 +203,7 @@ if (!isset($_GET['admin'])) {
                             while ($row = mysqli_fetch_row($query)) {
                                 echo "<div class='panel-row'>";
                                 echo "<div class='panel-left'>";
-                                $row[0] = str_replace(' ', '%20', $row[0]);
+                                $row[0] = str_replace('%20', ' ', $row[0]);
                                 $_SESSION['album'] = str_replace(' ', '%20', $_SESSION['album']);
                                 if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                                     echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '&admin=yes")>';
@@ -216,8 +220,8 @@ if (!isset($_GET['admin'])) {
                                 echo "<p>Opis: " . $row[1] . "</p>";
                                 echo "</div>";
                                 echo "<div class='info-wrap-right'>";
-                                echo "<p>Cena zakupu: </p>";
-                                echo "<p>Wartość: </p>";
+                                echo "<p>Cena zakupu: " . $row[7] . " zł</p>";
+                                echo "<p>Wartość: " . $row[8] . " zł</p>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
@@ -266,7 +270,11 @@ if (!isset($_GET['admin'])) {
         </div>
         <?php
         if (isset($_POST['album'])) {
-            header("Location: home.php?admin=yes&changed=yes");
+            ?>
+            <script type="text/javascript">
+                window.location.href = 'home.php?admin=yes&changed=yes'
+            </script>
+            <?php
         }
         ?>
     </div>

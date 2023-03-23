@@ -1,7 +1,11 @@
 <?php
 session_start();
 if (!$_SESSION['zalogowany']) {
-    header('Location: index.php');
+    ?>
+    <script type="text/javascript">
+        window.location.href = 'index.php'
+    </script>
+    <?php
 }
 ?>
 <!DOCTYPE html>

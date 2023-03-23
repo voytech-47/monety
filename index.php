@@ -81,7 +81,11 @@ $_SESSION['zalogowany'] = false;
                         } else {
                             $_SESSION['zalogowany'] = true;
                             $_SESSION['login'] = $_POST['login'];
-                            header("Location: home.php");
+                            ?>
+                            <script type="text/javascript">
+                                window.location.href = 'home.php'
+                            </script>
+                            <?php
                         }
                     }
 
