@@ -143,8 +143,15 @@ if (!isset($_GET['admin'])) {
 
                     for ($i = 1; $i < 6; $i++) {
                         echo '<span class="input" style="margin-bottom: 0.5rem">';
+                        echo '<span class="upper-span">';
                         echo '<label for="zdjecie' . $i . '" id="label-zdjecie' . $i . '" style="margin-bottom: 0.5rem" onmouseover="highlightPhoto(this)" onmouseout="unHighlightPhoto(this)">Zdjęcie ' . $i . '</label>';
                         echo '<input type="file" name="zdjecie' . $i . '" id="zdjecie' . $i . '" accept=".jpg,.jpeg,.png,.jfif">';
+                        echo '</span>';
+                        if ($i >= 3 && $row[$i+1] != '') {
+                            echo '<span class="lower-span">';
+                            echo '<button id="delete">Usuń zdjęcie ' . $i . '</button>';
+                            echo '</span>';
+                        }
                         echo '</span>';
                     }
                     echo <<<EOL
@@ -180,14 +187,18 @@ if (!isset($_GET['admin'])) {
                         $allowed = array('jpg', 'jpeg', 'png', 'jfif', 'JPG', 'JPEG', 'PNG', 'JFIF');
                         for ($i = 1; $i < 6; $i++) {
                             $name = "zdjecie" . $i;
-                            if ($_FILES[$name]['name'] != "") {
-                                $oldPhoto = "images/" . strval($_SESSION['album']) . "/" . $row[$i];
-                                unlink($oldPhoto);
+                            if (($_FILES[$name]['error'] == 4) || ($_FILES[$name]['size'] == 0 && $_FILES[$name]['error'] == 0)) {
+                                continue;
+                            } else {
+                                if ($row[$i-1] != '') {
+                                    $oldPhoto = "images/" . strval($_SESSION['album']) . "/" . $row[$i];
+                                    unlink($oldPhoto);
+                                }
                                 $updatePhoto = "UPDATE `" . $_SESSION['album'] . "` SET zdjecie" . $i . "='" . $_FILES[$name]['name'] . "', time = NOW() WHERE nazwa='" . $_SESSION['nazwa'] . "' LIMIT 1;";
                                 $targetPhoto = "images/" . strval($_SESSION['album']) . "/" . basename($_FILES[$name]['name']);
-                                $fileType_photo = pathinfo($target_photo, PATHINFO_EXTENSION);
+                                $fileType_photo = pathinfo($targetPhoto, PATHINFO_EXTENSION);
                                 if (in_array($fileType_photo, $allowed)) {
-                                    move_uploaded_file($_FILES[$name]['tmp_name'], $target_photo);
+                                    move_uploaded_file($_FILES[$name]['tmp_name'], $targetPhoto);
                                 }
                                 $query4 = mysqli_query($polaczenie, $updatePhoto);
                             }
@@ -215,7 +226,7 @@ if (!isset($_GET['admin'])) {
                                 mysqli_close($polaczenie);
                                 ?>
                                 <script type="text/javascript">
-                                    window.location.href = 'album.php?admin=yes'
+                                                    window.location.href = 'album.php?admin=yes'
                                 </script>
                                 <?php
                             } catch (mysqli_sql_exception $e) {
@@ -309,7 +320,7 @@ if (!isset($_GET['admin'])) {
             } else {
                 magnify(value)
             }
-        }
+    }
     </script>
     <footer>
         <a href='https://github.com/voytech-47'>autor: Wojciech Grzybowski</a>

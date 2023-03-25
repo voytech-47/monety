@@ -203,20 +203,22 @@ if (!isset($_GET['admin'])) {
                             while ($row = mysqli_fetch_row($query)) {
                                 echo "<div class='panel-row'>";
                                 echo "<div class='panel-left'>";
-                                $row[0] = str_replace('%20', ' ', $row[0]);
-                                $_SESSION['album'] = str_replace(' ', '%20', $_SESSION['album']);
+                                $coinName = str_replace('%20', ' ', $row[0]);
+                                $albumName = str_replace('%20', ' ', $_SESSION['album']);
+                                $row[0] = str_replace(' ', '%20', $row[0]);
+                                $_SESSION['album'] = str_replace('%20', '%20', $_SESSION['album']);
                                 if (isset($_SESSION['login']) and $_SESSION['login'] == 'admin' and isset($_GET['admin']) and $_GET['admin'] == "yes") {
                                     echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '&admin=yes")>';
                                 } else {
                                     echo '<a id="img-wrap" onclick=fadeOut("./moneta.php?nazwa=' . $row[0] . '&album=' . $_SESSION["album"] . '")>';
                                 }
-                                echo "<img class='img-top' src='images/" . $_SESSION['album'] . "/" . $row[2] . "' alt='" . $row[0] . "'>
-                                <img class='img-bot' src='images/" . $_SESSION['album'] . "/" . $row[3] . "' alt='" . $row[0] . "'>
+                                echo "<img class='img-top' src='images/" . $albumName . "/" . $row[2] . "' alt='" . $row[0] . "'>
+                                <img class='img-bot' src='images/" . $albumName . "/" . $row[3] . "' alt='" . $row[0] . "'>
                                 </a>";
                                 echo "</div>";
                                 echo "<div class='panel-right'>";
                                 echo "<div class='info-wrap-left'>";
-                                echo "<h1>" . $row[0] . "</h1>";
+                                echo "<h1>" . $coinName . "</h1>";
                                 echo "<p>Opis: " . $row[1] . "</p>";
                                 echo "</div>";
                                 echo "<div class='info-wrap-right'>";

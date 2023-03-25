@@ -135,7 +135,7 @@ input[type="range"] {
 
 .input {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .input input {
@@ -209,4 +209,11 @@ input[type="range"] {
 
 img {
     max-height: 10rem;
+}
+
+.lower-span {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
 }

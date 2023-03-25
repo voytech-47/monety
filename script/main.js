@@ -72,12 +72,12 @@ isFileValid = false
 isNameValid = false
 function checkValidation(input, mode) {
     if (mode == 'f') {
-        if (input.files.length > 5 || input.files.length == 0) {
-            input.style.color = 'red'
-            isFileValid = false
-        } else {
+        if (input.files.length <= 5 && input.files.length > 1) {
             input.style.color = 'black'
             isFileValid = true
+        } else {
+            input.style.color = 'red'
+            isFileValid = false
         }
     } else {
         if (input.checkValidity()) {
